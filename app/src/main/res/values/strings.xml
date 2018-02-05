@@ -4,4 +4,7 @@
     <string name="title_maps">Maps</string>
     <string name="title_profile">Profile</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="hello_lessons_fragment">Hello Lessons fragment</string>
+    <string name="hello_profile_fragment">Hello Profile fragment</string>
 </resources>

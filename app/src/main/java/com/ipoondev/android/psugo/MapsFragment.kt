@@ -15,22 +15,17 @@ import com.google.android.gms.maps.model.MarkerOptions
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var mMapFragment: MapFragment
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_maps, container, false)
-        return view
+        return inflater!!.inflate(R.layout.fragment_maps, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mapFragment = activity.fragmentManager.findFragmentById(R.id.map) as MapFragment
-        mapFragment.getMapAsync(this)
+        mMapFragment = activity.fragmentManager.findFragmentById(R.id.map) as MapFragment
+        mMapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -40,5 +35,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activity.fragmentManager.beginTransaction().remove(mMapFragment).commit()
     }
 }

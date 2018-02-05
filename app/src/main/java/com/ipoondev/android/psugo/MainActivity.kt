@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_lessons-> {
+                pushFragment(LessonsFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_maps-> {
@@ -26,15 +27,15 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile-> {
+                pushFragment(ProfileFragment())
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
     }
-    fun pushFragment(fragment: Fragment?) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction?.replace(R.id.frame_layout, fragment)
-        fragmentTransaction.commit()
 
+    private fun pushFragment(fragment: Fragment?) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction?.replace(R.id.frame_layout, fragment)?.commit()
     }
 }

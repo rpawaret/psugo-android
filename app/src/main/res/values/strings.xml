@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PSU GO</string>
+    <string name="title_lessons">Lessons</string>
+    <string name="title_maps">Maps</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_activity_maps">Map</string>
+</resources>

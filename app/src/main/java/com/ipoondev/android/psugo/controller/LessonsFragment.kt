@@ -8,14 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ipoondev.android.psugo.R
-import com.ipoondev.android.psugo.adapters.LessonRecyclerAdapter
+import com.ipoondev.android.psugo.adapters.LessonsRecyclerAdapter
 import com.ipoondev.android.psugo.services.DataService
 import com.ipoondev.android.psugo.utilities.EXTRA_CATEGORY
 import kotlinx.android.synthetic.main.fragment_lessons.*
 
 class LessonsFragment : Fragment() {
 
-    lateinit var adapter : LessonRecyclerAdapter
+    lateinit var mAdapter: LessonsRecyclerAdapter
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -25,14 +25,14 @@ class LessonsFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = LessonRecyclerAdapter(activity, DataService.categories) { category ->
+        mAdapter = LessonsRecyclerAdapter(activity, DataService.lessons) { lesson ->
             val lessonDetailIntent = Intent(activity, LessonsDetailActivity::class.java)
-            lessonDetailIntent.putExtra(EXTRA_CATEGORY, category.title)
+            lessonDetailIntent.putExtra(EXTRA_CATEGORY, lesson.title)
             startActivity(lessonDetailIntent)
 
         }
 
-        recycler_lessons.adapter = adapter
+        recycler_lessons.adapter = mAdapter
         recycler_lessons.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(activity)
         recycler_lessons.layoutManager = layoutManager

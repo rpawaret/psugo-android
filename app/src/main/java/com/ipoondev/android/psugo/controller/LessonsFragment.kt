@@ -1,5 +1,6 @@
 package com.ipoondev.android.psugo.controller
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -9,9 +10,10 @@ import android.view.ViewGroup
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.adapters.LessonRecyclerAdapter
 import com.ipoondev.android.psugo.services.DataService
+import com.ipoondev.android.psugo.utilities.EXTRA_CATEGORY
 import kotlinx.android.synthetic.main.fragment_lessons.*
 
-class LessonFragment : Fragment() {
+class LessonsFragment : Fragment() {
 
     lateinit var adapter : LessonRecyclerAdapter
 
@@ -23,17 +25,20 @@ class LessonFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = LessonRecyclerAdapter(activity, DataService.categories)
-        recycler_lesson.adapter = adapter
-        recycler_lesson.setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(activity)
-        recycler_lesson.layoutManager = layoutManager
+        adapter = LessonRecyclerAdapter(activity, DataService.categories) { category ->
+            val lessonDetailIntent = Intent(activity, LessonsDetailActivity::class.java)
+            lessonDetailIntent.putExtra(EXTRA_CATEGORY, category.title)
+            startActivity(lessonDetailIntent)
 
+        }
+
+        recycler_lessons.adapter = adapter
+        recycler_lessons.setHasFixedSize(true)
+        val layoutManager = LinearLayoutManager(activity)
+        recycler_lessons.layoutManager = layoutManager
 
 
     }
-
-
 
 }
 

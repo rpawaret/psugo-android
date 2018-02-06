@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_lessons -> {
-                pushFragment(LessonFragment())
+                pushFragment(LessonsFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_maps -> {

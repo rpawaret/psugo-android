@@ -4,7 +4,7 @@
                                              android:id="@+id/frameLayout"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
-                                             tools:context="com.ipoondev.android.psugo.controller.LessonFragment">
+                                             tools:context="com.ipoondev.android.psugo.controller.LessonsFragment">
 
 
     <TextView
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_lesson"
+        android:id="@+id/recycler_lessons"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"

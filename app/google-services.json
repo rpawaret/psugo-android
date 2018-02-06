@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1057998863738",
+    "firebase_url": "https://psugo-9a86c.firebaseio.com",
+    "project_id": "psugo-9a86c",
+    "storage_bucket": "psugo-9a86c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057998863738:android:169b94e72c0061a6",
+        "android_client_info": {
+          "package_name": "com.ipoondev.android.psugo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057998863738-45s0nv0ib5ir25mbav2eg0vhuvhppt1h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ipoondev.android.psugo",
+            "certificate_hash": "270c390e93d838416703721fc71f778700d29575"
+          }
+        },
+        {
+          "client_id": "1057998863738-jpnra5l5kgdvt3k58tfucqruaue8hsk5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsHhd4INMcn9OmiWKmTZi-60sSFoCkh4w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057998863738-jpnra5l5kgdvt3k58tfucqruaue8hsk5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

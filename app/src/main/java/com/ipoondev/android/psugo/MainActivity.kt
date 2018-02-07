@@ -1,10 +1,12 @@
-package com.ipoondev.android.psugo.controller
+package com.ipoondev.android.psugo
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import com.ipoondev.android.psugo.R
+import com.ipoondev.android.psugo.lessons.LessonsFragment
+import com.ipoondev.android.psugo.maps.MapsFragment
+import com.ipoondev.android.psugo.profile.ProfileFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {

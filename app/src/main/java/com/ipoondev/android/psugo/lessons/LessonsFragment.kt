@@ -1,4 +1,4 @@
-package com.ipoondev.android.psugo.controller
+package com.ipoondev.android.psugo.lessons
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.adapters.LessonsRecyclerAdapter
 import com.ipoondev.android.psugo.services.DataService
-import com.ipoondev.android.psugo.utilities.EXTRA_CATEGORY
+import com.ipoondev.android.psugo.utilities.EXTRA_LESSON_ID
 import kotlinx.android.synthetic.main.fragment_lessons.*
 
 class LessonsFragment : Fragment() {
@@ -27,7 +27,7 @@ class LessonsFragment : Fragment() {
 
         mAdapter = LessonsRecyclerAdapter(activity, DataService.lessons) { lesson ->
             val lessonDetailIntent = Intent(activity, LessonsDetailActivity::class.java)
-            lessonDetailIntent.putExtra(EXTRA_CATEGORY, lesson.title)
+            lessonDetailIntent.putExtra(EXTRA_LESSON_ID, lesson.id)
             startActivity(lessonDetailIntent)
 
         }

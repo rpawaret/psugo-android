@@ -5,6 +5,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ipoondev.android.psugo.controller.LessonsDetailActivity">
+    tools:context="com.ipoondev.android.psugo.lessons.LessonsDetailActivity">
 
+    <TextView
+        android:id="@+id/text_lesson_detail_title"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Lesson 1"/>
+
+    <TextView
+        android:id="@+id/text_lesson_detail_teacher"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_lesson_detail_title"
+        tools:text="Teacher: Pawares Rukkumnerd"/>
+
+    <Button
+        android:id="@+id/button_enroll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_light"
+        android:text="Enroll"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"/>
 </android.support.constraint.ConstraintLayout>

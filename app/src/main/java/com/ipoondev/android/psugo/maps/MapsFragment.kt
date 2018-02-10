@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -28,17 +29,17 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        LocalBroadcastManager.getInstance(activity).registerReceiver(registerGeofenceCompleteReceiver,
+        LocalBroadcastManager.getInstance(activity!!).registerReceiver(registerGeofenceCompleteReceiver,
                 IntentFilter(BROADCAST_REGISTER_GEOFENCE_COMPLELE))
 
-        LocalBroadcastManager.getInstance(activity).registerReceiver(geofenceTransitionEnterReceiver,
+        LocalBroadcastManager.getInstance(activity!!).registerReceiver(geofenceTransitionEnterReceiver,
                 IntentFilter(BROADCAST_GEOFENCE_TRANSITION_ENTER))
     }
 
     private val registerGeofenceCompleteReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             // TODO create item's marker then display on map
-//            Toast.makeText(activity, "Receive register geofence complete signal", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, "Receive register geofence complete signal", Toast.LENGTH_LONG).show()
             Log.d(TAG, "Receive register geofence complete signal")
         }
     }
@@ -57,16 +58,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        super.onViewCreated(view!!, savedInstanceState)
 
-        mMapFragment = activity.fragmentManager.findFragmentById(R.id.map) as MapFragment
+        mMapFragment = activity!!.fragmentManager.findFragmentById(R.id.map) as MapFragment
         mMapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(activity!!, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.isMyLocationEnabled = true
         }
@@ -84,6 +85,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        activity.fragmentManager.beginTransaction().remove(mMapFragment).commit()
+        activity!!.fragmentManager.beginTransaction().remove(mMapFragment).commit()
     }
 }

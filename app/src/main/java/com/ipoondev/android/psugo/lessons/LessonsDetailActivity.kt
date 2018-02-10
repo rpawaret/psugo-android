@@ -26,8 +26,10 @@ class LessonsDetailActivity : AppCompatActivity() {
 
             if (!isEnroll) {
                 enrollLesson()
+                button_enroll.text = "Enrolled"
             } else {
                 unEnrollLesson()
+                button_enroll.text = "Enroll"
             }
         }
 
@@ -36,13 +38,10 @@ class LessonsDetailActivity : AppCompatActivity() {
     fun enrollLesson() {
         isEnroll = true
         Toast.makeText(this, "You enroll lesson Complete", Toast.LENGTH_LONG).show()
-        button_enroll.text = "Enrolled"
 
-        // TODO Create the Geofences's lesson
 //        GeofencingService.createGeofenceList(DataService.items1)
-        geofencing?.populateGeofenceList(DataService.items1)
+        geofencing!!.populateGeofenceList(DataService.items2)
 
-        // TODO register geofences
 //        GeofencingService.registerAllGeofences(this)
         geofencing?.performPendingGeofenceTask("ADD")
 
@@ -59,11 +58,9 @@ class LessonsDetailActivity : AppCompatActivity() {
     fun unEnrollLesson() {
         isEnroll = false
         Toast.makeText(this, "You unenroll lesson Complete", Toast.LENGTH_LONG).show()
-        button_enroll.text = "Enroll"
 
         // TODO unregister geofences
 //        GeofencingService.unRegisterAllGeofences(this)
-
         geofencing?.performPendingGeofenceTask("REMOVE")
         // TODO remove item's marker
     }

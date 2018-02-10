@@ -18,14 +18,13 @@ import com.ipoondev.android.psugo.model.Item
 
 
 class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
-    private val mGeofencingClient: GeofencingClient
-    private val mGeofenceList: ArrayList<Geofence>
-    private val mGeofencePendingIntent: PendingIntent?
+    private val mGeofencingClient: GeofencingClient = LocationServices.getGeofencingClient(mContext)
+    private val mGeofenceList: ArrayList<Geofence> = ArrayList()
+    private var mGeofencePendingIntent: PendingIntent? = null
+    private var mPendingGeofenceTask = PendingGeofenceTask.NONE
 
-    init {
-        mGeofenceList = ArrayList()
-        mGeofencePendingIntent = null
-        mGeofencingClient = LocationServices.getGeofencingClient(mContext)
+    private enum class PendingGeofenceTask {
+        ADD, REMOVE, NONE
     }
 
     private val geofencingRequest: GeofencingRequest
@@ -36,17 +35,15 @@ class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
             return builder.build()
         }
 
-//     We use FLAG_UPDATE_CURRENT so that we get the same pending intent back
-// when calling addGeofences() and removeGeofences().
-    private val geofencePendingIntent: PendingIntent
+    private val geofencePendingIntent: PendingIntent?
         get() {
             if (mGeofencePendingIntent != null) {
                 return mGeofencePendingIntent
             }
             val intent = Intent(mContext, GeofenceTransitionsIntentService::class.java)
-            return PendingIntent.getService(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            mGeofencePendingIntent = PendingIntent.getService(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            return mGeofencePendingIntent
         }
-
 
 
     fun populateGeofenceList(items: List<Item>) {
@@ -68,30 +65,27 @@ class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
 
     fun performPendingGeofenceTask(perform: String) {
         Log.d(TAG, "performPendingGeofenceTask(): hit")
-        //if (mPendingGeofenceTask == PendingGeofenceTask.ADD) {
-        when(perform) {
+        when (perform) {
             "ADD" -> addGeofences()
             "REMOVE" -> removeGeofences()
             else -> Log.e("Geofencing", "Could not Perform")
         }
-        // } else if (mPendingGeofenceTask == PendingGeofenceTask.REMOVE) {
-        //    removeGeofences();
-        //}
     }
 
     private fun addGeofences() {
         Log.d(TAG, "addGeofences(): hit")
-        //  if (!checkPermissions()) {
-        //     showSnackbar(getString(R.string.insufficient_permissions));
-        //     return;
-        // }
-
-        if (ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION)
-        != PackageManager.PERMISSION_GRANTED) {
+        if (checkPermissions()) {
+            try {
+                mGeofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
+                        .addOnCompleteListener(this)
+            } catch (se: SecurityException) {
+                Log.e(TAG, se.localizedMessage)
+            }
+        } else {
+            Toast.makeText(mContext, "Insufficient permissions.", Toast.LENGTH_LONG).show()
             return
         }
-        mGeofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
-                .addOnCompleteListener(this)
+
     }
 
     private fun removeGeofences() {
@@ -121,6 +115,12 @@ class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
             //  String errorMessage = GeofenceErrorMessages.getErrorString(this, task.getException());
             // Log.w(TAG, errorMessage);
         }
+    }
+
+    private fun checkPermissions(): Boolean {
+        val permissonState = ActivityCompat.checkSelfPermission(mContext,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+        return permissonState == PackageManager.PERMISSION_GRANTED
     }
 
     companion object {

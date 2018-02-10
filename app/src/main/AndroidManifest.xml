@@ -45,6 +45,9 @@
         </activity>
 
         <service android:name=".geofencing.GeofenceTransitionsIntentService"/>
+
+        <activity android:name=".login.LoginActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -48,6 +48,8 @@
 
         <activity android:name=".login.LoginActivity">
         </activity>
+        <activity android:name=".login.CreateUserActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -9,16 +9,21 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.TaskStackBuilder
+import android.support.v4.content.LocalBroadcastManager
 import android.text.TextUtils
 import android.util.Log
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 import com.ipoondev.android.psugo.MainActivity
 import com.ipoondev.android.psugo.R
+import com.ipoondev.android.psugo.utilities.BROADCAST_GEOFENCE_TRANSITION_ENTER
 import java.util.*
 
 class GeofenceTransitionsIntentService : IntentService(TAG) {
 
+    private fun sendSignalToMapsFragment() {
+
+    }
 
     override fun onHandleIntent(intent: Intent?) {
         Log.d(TAG, "onHandleIntent(): hit")
@@ -36,9 +41,12 @@ class GeofenceTransitionsIntentService : IntentService(TAG) {
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
+            val geofenceTransitionEnter = Intent(BROADCAST_GEOFENCE_TRANSITION_ENTER)
+            LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(geofenceTransitionEnter)
+
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             val triggeringGeofences = geofencingEvent.triggeringGeofences
-            Log.d(TAG, triggeringGeofences.toString())
+            Log.d(TAG, "TriggeringGeofences: $triggeringGeofences")
 
             // Get the transition details as a String.
             val geofenceTransitionDetails = getGeofenceTransitionDetails(geofenceTransition,

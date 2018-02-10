@@ -17,14 +17,15 @@ object DataService {
     val items2 = listOf(
             Item(1, "Item 1", "COE", GeoPoint(7.0067125, 100.4980793), 1, 50F),
             Item(2, "Item 2", "คณะวิทยาศาสตร์", GeoPoint(7.0074073, 100.4978433), 1, 50F),
-            Item(3, "Item 3", "ศูนย์คอมพิวเตอร์", GeoPoint(7.0089354, 100.4979452), 1, 50F),
+            Item(3, "Item 3", "ศูนย์คอมพิวเตอร์", GeoPoint(7.0093895, 100.4981548), 1, 100F),
             Item(4, "Item 4", "Songklanagarind Hospital", GeoPoint(7.007323, 100.493765), 1, 50F),
             Item(5, "Item 5", "Faculty of Liberal Arts", GeoPoint(7.0117396, 100.4966684), 1, 50F)
     )
 
     val lessons = listOf(
             Lesson(1, "Lesson 1", "shirtimage","Pawares Rukkumnerd", items1),
-            Lesson(2, "Lesson 2", "hoodieimage","IBOT", items2)
+            Lesson(2, "มารู้จัก มอ กันเถอะ", "hoodieimage","IBOT", items2)
 
     )
+    // lesson วิชา
 }

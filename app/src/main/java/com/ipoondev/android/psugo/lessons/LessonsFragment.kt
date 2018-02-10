@@ -17,12 +17,12 @@ class LessonsFragment : Fragment() {
 
     lateinit var mAdapter: LessonsRecyclerAdapter
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_lessons, container, false)
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_lessons, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         mAdapter = LessonsRecyclerAdapter(activity, DataService.lessons) { lesson ->
@@ -36,7 +36,6 @@ class LessonsFragment : Fragment() {
         recycler_lessons.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(activity)
         recycler_lessons.layoutManager = layoutManager
-
 
     }
 

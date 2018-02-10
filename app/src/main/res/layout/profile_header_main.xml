@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Pawares Rukkumnerd"
         android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@+id/image_profile"
         app:layout_constraintTop_toTopOf="@+id/image_profile"
@@ -34,7 +33,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="pawares.r@gmail.com"
         android:textColor="@android:color/white"
         app:layout_constraintStart_toEndOf="@+id/image_profile"
         app:layout_constraintTop_toBottomOf="@+id/text_user_name"
@@ -46,10 +44,12 @@
         android:layout_height="32dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:text="Login"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_profile"/>
+        app:layout_constraintTop_toBottomOf="@+id/image_profile"
+        app:layout_constraintVertical_bias="0.27999997"/>
 </android.support.constraint.ConstraintLayout>

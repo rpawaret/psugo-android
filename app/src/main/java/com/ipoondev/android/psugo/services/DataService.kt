@@ -1,11 +1,14 @@
 package com.ipoondev.android.psugo.services
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
 import com.ipoondev.android.psugo.model.Item
 import com.ipoondev.android.psugo.model.Mission
+import com.ipoondev.android.psugo.model.Player
 
 object DataService {
 
+    val user = FirebaseAuth.getInstance().currentUser
 
     val items1 = listOf(
             Item(1, "Item 1", "My Home", GeoPoint(8.0805092, 99.8910302), 1, 50F),
@@ -27,5 +30,8 @@ object DataService {
             Mission(2, "มารู้จัก มอ กันเถอะ", "hoodieimage","IBOT", items2)
 
     )
-    // lesson วิชา
+
+    val player =  listOf(
+            Player(user!!.uid, user.displayName!!, 0.0)
+    )
 }

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.ipoondev.android.psugo">
+    package="com.ipoondev.android.psugo">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".PSUGO"
@@ -22,9 +22,9 @@
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!--
@@ -37,19 +37,16 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key"/>
+            android:value="@string/google_maps_key" />
 
-        <activity android:name=".lessons.LessonsDetailActivity">
-        </activity>
-        <activity android:name=".settins.SettingsActivity">
-        </activity>
+        <activity android:name=".lessons.LessonsDetailActivity"></activity>
+        <activity android:name=".settings.SettingsActivity"></activity>
 
-        <service android:name=".geofencing.GeofenceTransitionsIntentService"/>
+        <service android:name=".geofencing.GeofenceTransitionsIntentService" />
 
-        <activity android:name=".login.LoginActivity">
-        </activity>
-        <activity android:name=".login.CreateUserActivity">
-        </activity>
+        <activity android:name=".login.LoginActivity"></activity>
+        <activity android:name=".signup.CreateUserActivity"></activity>
+        <activity android:name=".auth.AuthActivity"></activity>
     </application>
 
 </manifest>

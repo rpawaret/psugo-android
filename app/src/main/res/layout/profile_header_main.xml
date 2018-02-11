@@ -39,7 +39,7 @@
         tools:text="pawares.r@gmail.com"/>
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/button_profile_login"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_marginBottom="8dp"

@@ -10,22 +10,18 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.ipoondev.android.psugo.MainActivity
 import com.ipoondev.android.psugo.R
-import kotlinx.android.synthetic.main.activity_auth.*
+import kotlinx.android.synthetic.main.activity_auth_ui.*
 
-class AuthActivity : AppCompatActivity() {
-    private val TAG = AuthActivity::class.simpleName
+class AuthUiActivity : AppCompatActivity() {
+    private val TAG = AuthUiActivity::class.simpleName
     private val GOOGLE_TOS_URL = "https://www.google.com/policies/terms/"
     private val RC_SIGN_IN = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
+        setContentView(R.layout.activity_auth_ui)
+        Log.d(TAG, "onCreate(): hit")
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart(): hit")
         signIn()
     }
 
@@ -62,8 +58,10 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun handleSignInResponse(resultCode: Int, data: Intent?) {
+        Log.d(TAG, "handleSignInResponse(): hit")
         val response = IdpResponse.fromResultIntent(data)
 
+        // Successfully signed in
         if (resultCode == RESULT_OK) {
             Log.d(TAG, "SIGN IN SUCCESSFUL")
             startMainActivity()
@@ -72,6 +70,7 @@ class AuthActivity : AppCompatActivity() {
         } else {
             // Sign in failed
             if (response == null) {
+                // User pressed back button
                 showSnackbar(resources.getString(R.string.sign_in_cancelled))
                 return
             }

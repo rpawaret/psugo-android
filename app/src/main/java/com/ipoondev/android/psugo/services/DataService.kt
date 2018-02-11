@@ -2,7 +2,7 @@ package com.ipoondev.android.psugo.services
 
 import com.google.firebase.firestore.GeoPoint
 import com.ipoondev.android.psugo.model.Item
-import com.ipoondev.android.psugo.model.Lesson
+import com.ipoondev.android.psugo.model.Mission
 
 object DataService {
 
@@ -22,9 +22,9 @@ object DataService {
             Item(5, "Item 5", "Faculty of Liberal Arts", GeoPoint(7.0117396, 100.4966684), 1, 50F)
     )
 
-    val lessons = listOf(
-            Lesson(1, "Lesson 1", "shirtimage","Pawares Rukkumnerd", items1),
-            Lesson(2, "มารู้จัก มอ กันเถอะ", "hoodieimage","IBOT", items2)
+    val missions = listOf(
+            Mission(1, "Mission 1", "shirtimage","Pawares Rukkumnerd", items1),
+            Mission(2, "มารู้จัก มอ กันเถอะ", "hoodieimage","IBOT", items2)
 
     )
     // lesson วิชา

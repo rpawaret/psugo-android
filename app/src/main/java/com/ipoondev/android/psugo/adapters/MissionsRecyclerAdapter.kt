@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.ipoondev.android.psugo.R
-import com.ipoondev.android.psugo.model.Lesson
+import com.ipoondev.android.psugo.model.Mission
 
-class MissionsRecyclerAdapter(val context: Context, val lessons: List<Lesson>, val itemClick: (Lesson) -> Unit) : RecyclerView.Adapter<MissionsRecyclerAdapter.Holder>() {
+class MissionsRecyclerAdapter(val context: Context, val missions: List<Mission>, val itemClick: (Mission) -> Unit) : RecyclerView.Adapter<MissionsRecyclerAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): Holder {
         val view = LayoutInflater.from(context).inflate(R.layout.mission_list_item, parent, false)
@@ -18,23 +18,23 @@ class MissionsRecyclerAdapter(val context: Context, val lessons: List<Lesson>, v
     }
 
     override fun getItemCount(): Int {
-        return lessons.count()
+        return missions.count()
     }
 
     override fun onBindViewHolder(holder: Holder?, position: Int) {
-        holder?.bindLesson(lessons[position], context)
+        holder?.bindMission(missions[position], context)
     }
 
-    inner class Holder(itemView: View?, val itemClick: (Lesson) -> Unit) : RecyclerView.ViewHolder(itemView) {
-        val lessonImage = itemView?.findViewById<ImageView>(R.id.image_mission)
-        val lessonName = itemView?.findViewById<TextView>(R.id.text_mission_name)
+    inner class Holder(itemView: View?, val itemClick: (Mission) -> Unit) : RecyclerView.ViewHolder(itemView) {
+        val missionImage = itemView?.findViewById<ImageView>(R.id.image_mission)
+        val missionName = itemView?.findViewById<TextView>(R.id.text_mission_name)
 
-        fun bindLesson(lesson: Lesson, context: Context) {
-            val resourceId = context.resources.getIdentifier(lesson.image, "drawable", context.packageName)
-            lessonImage?.setImageResource(resourceId)
-            lessonName?.text = lesson.title
+        fun bindMission(mission: Mission, context: Context) {
+            val resourceId = context.resources.getIdentifier(mission.image, "drawable", context.packageName)
+            missionImage?.setImageResource(resourceId)
+            missionName?.text = mission.title
 
-            itemView.setOnClickListener { itemClick(lesson) }
+            itemView.setOnClickListener { itemClick(mission) }
         }
 
     }

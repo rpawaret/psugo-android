@@ -6,12 +6,12 @@ import android.widget.Toast
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.geofencing.Geofencing
 import com.ipoondev.android.psugo.services.DataService
-import com.ipoondev.android.psugo.utilities.EXTRA_LESSON_ID
+import com.ipoondev.android.psugo.utilities.EXTRA_MISSION_ID
 import kotlinx.android.synthetic.main.activity_mission_details.*
 
 class MissionDetailsActivity : AppCompatActivity() {
     val TAG = MissionDetailsActivity::class.simpleName
-    var isEnroll = false
+    var isStart = false
     private var geofencing: Geofencing? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,25 +19,25 @@ class MissionDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mission_details)
         geofencing = Geofencing(this)
 
-        val lessonId = intent.getIntExtra(EXTRA_LESSON_ID, 0)
-        text_mission_detail_title.text = DataService.lessons.get(0).title
+        val lessonId = intent.getIntExtra(EXTRA_MISSION_ID, 0)
+        text_mission_detail_title.text = DataService.missions.get(0).title
 
         button_start.setOnClickListener {
 
-            if (!isEnroll) {
-                enrollLesson()
-                button_start.text = "Enrolled"
+            if (!isStart) {
+                startMission()
+                button_start.text = "Started"
             } else {
-                unEnrollLesson()
-                button_start.text = "Enroll"
+                stopMission()
+                button_start.text = "start"
             }
         }
 
     }
 
-    fun enrollLesson() {
-        isEnroll = true
-        Toast.makeText(this, "You enroll lesson Complete", Toast.LENGTH_LONG).show()
+    fun startMission() {
+        isStart = true
+        Toast.makeText(this, "You start play mission", Toast.LENGTH_LONG).show()
 
 //        GeofencingService.createGeofenceList(DataService.items1)
         geofencing!!.populateGeofenceList(DataService.items2)
@@ -55,9 +55,9 @@ class MissionDetailsActivity : AppCompatActivity() {
 
     }
 
-    fun unEnrollLesson() {
-        isEnroll = false
-        Toast.makeText(this, "You unenroll lesson Complete", Toast.LENGTH_LONG).show()
+    fun stopMission() {
+        isStart = false
+        Toast.makeText(this, "You stop play mission Complete", Toast.LENGTH_LONG).show()
 
         // TODO unregister geofences
 //        GeofencingService.unRegisterAllGeofences(this)

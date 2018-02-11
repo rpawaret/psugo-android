@@ -46,7 +46,7 @@
 
         <activity android:name=".login.LoginActivity"></activity>
         <activity android:name=".signup.CreateUserActivity"></activity>
-        <activity android:name=".auth.AuthActivity"></activity>
+        <activity android:name=".auth.AuthUiActivity"></activity>
     </application>
 
 </manifest>

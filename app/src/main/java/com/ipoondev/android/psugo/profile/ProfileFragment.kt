@@ -9,16 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.ipoondev.android.psugo.R
-import com.ipoondev.android.psugo.auth.AuthActivity
-import com.ipoondev.android.psugo.services.AuthService
+import com.ipoondev.android.psugo.auth.AuthUiActivity
 import com.ipoondev.android.psugo.settings.SettingsActivity
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.profile_header_main.*
 
 class ProfileFragment : Fragment() {
     private val TAG = ProfileFragment::class.simpleName
+    private var user : FirebaseUser? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -28,10 +30,10 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        updateLoginButton()
+        user = FirebaseAuth.getInstance().currentUser
 
         button_profile_login.setOnClickListener {
-            if (!AuthService.checkUserLoggedIn()) {
+            if (user == null) {
                 signIn()
             } else {
                 signOut()
@@ -42,21 +44,26 @@ class ProfileFragment : Fragment() {
             val settingsIntent = Intent(activity, SettingsActivity::class.java)
             startActivity(settingsIntent)
         }
+
+        populateProfile()
+        updateLoginButton()
     }
 
-    override fun onStart() {
-        super.onStart()
-        updateUI(AuthService.currentUser)
-    }
-
-    private fun updateUI(currentUser: FirebaseUser?) {
-        text_user_name.text = currentUser?.displayName ?: "Not have User"
-        text_user_email.text = currentUser?.email ?: "Not have Email"
-
+    private fun populateProfile() {
+        if (user?.photoUrl != null) {
+            Picasso.with(activity)
+                    .load(user?.photoUrl)
+                    .placeholder(R.drawable.ic_home_black_24dp)
+                    .resize(70, 70)
+                    .centerCrop()
+                    .into(image_profile)
+        }
+        text_user_name.text = user?.displayName ?: "No User"
+        text_user_email.text = user?.email ?: "No email"
     }
 
     private fun signIn() {
-        val authIntent = Intent(activity, AuthActivity::class.java)
+        val authIntent = Intent(activity, AuthUiActivity::class.java)
         startActivity(authIntent)
     }
 
@@ -65,16 +72,18 @@ class ProfileFragment : Fragment() {
                 .signOut(activity!!)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "Signout Successful")
-                        updateUI(AuthService.currentUser)
+                        Log.d(TAG, "Sign out Successful")
+                        populateProfile()
+                        updateLoginButton()
                     } else {
                         Toast.makeText(activity, "Sign out failed", Toast.LENGTH_LONG).show()
                     }
                 }
     }
 
+
     private fun updateLoginButton() {
-        if (!AuthService.checkUserLoggedIn()) {
+        if (user == null) {
             button_profile_login.text = "Login"
         } else {
             button_profile_login.text = "Logout"

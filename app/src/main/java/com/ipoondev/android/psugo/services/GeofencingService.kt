@@ -27,8 +27,8 @@ object GeofencingService {
         for (item in items) {
             val geofence = Geofence.Builder()
                     .setRequestId(item.address)
-                    .setExpirationDuration((item.timeout * 60 * 60 * 1000))
-                    .setCircularRegion(item.geoPoint.latitude, item.geoPoint.longitude, item.radius)
+                    .setExpirationDuration((item.timeout!! * 60 * 60 * 1000))
+                    .setCircularRegion(item.geoPoint!!.latitude, item.geoPoint!!.longitude, item.radius!!)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build()
                 geofenceList.add(geofence)

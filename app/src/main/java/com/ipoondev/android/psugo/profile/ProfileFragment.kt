@@ -126,7 +126,7 @@ class ProfileFragment : Fragment() {
         val docRef = FirebaseFirestore.getInstance().collection("missions")
 
         for (mission in DataService.missions) {
-            docRef.document(mission.title).set(mission)
+            docRef.document().set(mission)
                     .addOnSuccessListener {
                         Log.d(TAG, "Missions has been saved")
                     }.addOnFailureListener {
@@ -141,7 +141,7 @@ class ProfileFragment : Fragment() {
         val docRef = FirebaseFirestore.getInstance().collection("items")
 
         for (item in DataService.items1) {
-            docRef.document(item.address).set(item)
+            docRef.document(item.address!!).set(item)
                     .addOnSuccessListener {
                         Log.d(TAG, "Items has been saved")
                     }

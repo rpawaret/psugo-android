@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.adapters.MissionsRecyclerAdapter
 import com.ipoondev.android.psugo.services.DataService
-import com.ipoondev.android.psugo.utilities.EXTRA_LESSON_ID
+import com.ipoondev.android.psugo.utilities.EXTRA_MISSION_ID
 import kotlinx.android.synthetic.main.fragment_missions.*
 
 class MissionsFragment : Fragment() {
@@ -25,10 +25,10 @@ class MissionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mAdapter = MissionsRecyclerAdapter(activity!!, DataService.lessons) { lesson ->
-            val lessonDetailIntent = Intent(activity, MissionDetailsActivity::class.java)
-            lessonDetailIntent.putExtra(EXTRA_LESSON_ID, lesson.id)
-            startActivity(lessonDetailIntent)
+        mAdapter = MissionsRecyclerAdapter(activity!!, DataService.missions) { mission ->
+            val missionDetailIntent = Intent(activity, MissionDetailsActivity::class.java)
+            missionDetailIntent.putExtra(EXTRA_MISSION_ID, mission.id)
+            startActivity(missionDetailIntent)
 
         }
 

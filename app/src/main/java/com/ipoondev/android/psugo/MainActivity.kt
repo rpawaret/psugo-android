@@ -21,7 +21,7 @@ private val TAG = MainActivity::class.simpleName
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.navigation_lessons -> {
+            R.id.navigation_missions -> {
                 pushFragment(MissionsFragment())
                 return@OnNavigationItemSelectedListener true
             }

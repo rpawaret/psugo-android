@@ -1,6 +1,6 @@
 package com.ipoondev.android.psugo.utilities
 
-const val EXTRA_LESSON_ID = "EXTRA_LESSON_ID"
+const val EXTRA_MISSION_ID = "EXTRA_MISSION_ID"
 const val EXTRA_SETTINGS = "Settings"
 const val EXTRA_TRANSITION_ENTER = "EXTRA_TRANSITION_ENTER"
 

@@ -7,7 +7,7 @@
     android:layout_height="166dp">
 
     <ImageView
-        android:id="@+id/image_lesson"
+        android:id="@+id/image_mission"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/hatimage"/>
 
     <TextView
-        android:id="@+id/text_lesson_name"
+        android:id="@+id/text_mission_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -28,9 +28,9 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/image_lesson"
-        app:layout_constraintEnd_toEndOf="@+id/image_lesson"
-        app:layout_constraintStart_toStartOf="@+id/image_lesson"
-        app:layout_constraintTop_toTopOf="@+id/image_lesson"
+        app:layout_constraintBottom_toBottomOf="@+id/image_mission"
+        app:layout_constraintEnd_toEndOf="@+id/image_mission"
+        app:layout_constraintStart_toStartOf="@+id/image_mission"
+        app:layout_constraintTop_toTopOf="@+id/image_mission"
         tools:text="Lesson 1"/>
 </android.support.constraint.ConstraintLayout>

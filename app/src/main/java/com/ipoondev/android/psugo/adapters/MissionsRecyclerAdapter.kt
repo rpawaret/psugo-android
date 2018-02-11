@@ -10,10 +10,10 @@ import android.widget.TextView
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.model.Lesson
 
-class LessonsRecyclerAdapter(val context: Context, val lessons: List<Lesson>, val itemClick: (Lesson) -> Unit) : RecyclerView.Adapter<LessonsRecyclerAdapter.Holder>() {
+class MissionsRecyclerAdapter(val context: Context, val lessons: List<Lesson>, val itemClick: (Lesson) -> Unit) : RecyclerView.Adapter<MissionsRecyclerAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): Holder {
-        val view = LayoutInflater.from(context).inflate(R.layout.lesson_list_item, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.mission_list_item, parent, false)
         return Holder(view, itemClick)
     }
 
@@ -26,8 +26,8 @@ class LessonsRecyclerAdapter(val context: Context, val lessons: List<Lesson>, va
     }
 
     inner class Holder(itemView: View?, val itemClick: (Lesson) -> Unit) : RecyclerView.ViewHolder(itemView) {
-        val lessonImage = itemView?.findViewById<ImageView>(R.id.image_lesson)
-        val lessonName = itemView?.findViewById<TextView>(R.id.text_lesson_name)
+        val lessonImage = itemView?.findViewById<ImageView>(R.id.image_mission)
+        val lessonName = itemView?.findViewById<TextView>(R.id.text_mission_name)
 
         fun bindLesson(lesson: Lesson, context: Context) {
             val resourceId = context.resources.getIdentifier(lesson.image, "drawable", context.packageName)

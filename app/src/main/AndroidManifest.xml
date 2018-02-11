@@ -39,7 +39,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".lessons.LessonsDetailActivity"></activity>
+        <activity android:name=".mission.MissionDetailsActivity"></activity>
         <activity android:name=".settings.SettingsActivity"></activity>
 
         <service android:name=".geofencing.GeofenceTransitionsIntentService" />

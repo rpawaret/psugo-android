@@ -4,7 +4,7 @@
                                              android:id="@+id/frameLayout"
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
-                                             tools:context="com.ipoondev.android.psugo.lessons.LessonsFragment">
+                                             tools:context="com.ipoondev.android.psugo.mission.MissionsFragment">
 
 
     <TextView
@@ -13,13 +13,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Lessons"
+        android:text="Missions"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_lessons"
+        android:id="@+id/recycler_missions"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"

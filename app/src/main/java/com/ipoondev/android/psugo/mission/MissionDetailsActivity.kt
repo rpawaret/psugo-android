@@ -1,4 +1,4 @@
-package com.ipoondev.android.psugo.lessons
+package com.ipoondev.android.psugo.mission
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -7,29 +7,29 @@ import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.geofencing.Geofencing
 import com.ipoondev.android.psugo.services.DataService
 import com.ipoondev.android.psugo.utilities.EXTRA_LESSON_ID
-import kotlinx.android.synthetic.main.activity_lessons_detail.*
+import kotlinx.android.synthetic.main.activity_mission_details.*
 
-class LessonsDetailActivity : AppCompatActivity() {
-    val TAG = LessonsDetailActivity::class.simpleName
+class MissionDetailsActivity : AppCompatActivity() {
+    val TAG = MissionDetailsActivity::class.simpleName
     var isEnroll = false
     private var geofencing: Geofencing? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_lessons_detail)
+        setContentView(R.layout.activity_mission_details)
         geofencing = Geofencing(this)
 
         val lessonId = intent.getIntExtra(EXTRA_LESSON_ID, 0)
-        text_lesson_detail_title.text = DataService.lessons.get(0).title
+        text_mission_detail_title.text = DataService.lessons.get(0).title
 
-        button_enroll.setOnClickListener {
+        button_start.setOnClickListener {
 
             if (!isEnroll) {
                 enrollLesson()
-                button_enroll.text = "Enrolled"
+                button_start.text = "Enrolled"
             } else {
                 unEnrollLesson()
-                button_enroll.text = "Enroll"
+                button_start.text = "Enroll"
             }
         }
 

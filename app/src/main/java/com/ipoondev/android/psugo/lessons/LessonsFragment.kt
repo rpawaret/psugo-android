@@ -25,7 +25,7 @@ class LessonsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mAdapter = LessonsRecyclerAdapter(activity, DataService.lessons) { lesson ->
+        mAdapter = LessonsRecyclerAdapter(activity!!, DataService.lessons) { lesson ->
             val lessonDetailIntent = Intent(activity, LessonsDetailActivity::class.java)
             lessonDetailIntent.putExtra(EXTRA_LESSON_ID, lesson.id)
             startActivity(lessonDetailIntent)

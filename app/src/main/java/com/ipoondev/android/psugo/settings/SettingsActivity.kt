@@ -1,4 +1,4 @@
-package com.ipoondev.android.psugo.settins
+package com.ipoondev.android.psugo.settings
 
 import android.content.pm.PackageManager
 import android.os.Bundle

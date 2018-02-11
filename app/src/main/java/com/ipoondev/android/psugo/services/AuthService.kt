@@ -2,17 +2,16 @@ package com.ipoondev.android.psugo.services
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
 object AuthService {
     private val TAG = AuthService::class.simpleName
 
-    private val firebaseAuth = FirebaseAuth.getInstance()!!
+    private val auth = FirebaseAuth.getInstance()!!
     var isUserLoggedIn = false
-    var currentUser = firebaseAuth.currentUser
+    var currentUser = auth.currentUser
 
     fun signUp(email: String, password: String, complete: (Boolean) -> Unit) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
+        auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { it ->
                     Log.d(TAG, "register Successful: ${it.result}")
                     complete(true)
@@ -25,12 +24,12 @@ object AuthService {
 
     fun signIn(email: String, password: String, complete: (Boolean) -> Unit) {
 
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+        auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { it ->
                     if (it.isSuccessful) {
                         Log.d(TAG, "Login Successful")
                         isUserLoggedIn = true
-                        currentUser = firebaseAuth.currentUser
+                        currentUser = auth.currentUser
                         Log.d(TAG, "currentUser: ${currentUser?.displayName} ${currentUser?.email}")
                         complete(true)
                     } else {
@@ -46,18 +45,16 @@ object AuthService {
     }
 
     fun signOut(complete: (Boolean) -> Unit) {
-        firebaseAuth.signOut()
+        auth.signOut()
         isUserLoggedIn = false
         currentUser = null
         Log.d(TAG, "currentUser: $currentUser")
         complete(true)
     }
 
-    fun getUser() : FirebaseUser? {
-        if (isUserLoggedIn) {
-            return currentUser
-        }
-        return null
+    fun checkUserLoggedIn() : Boolean {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        return currentUser != null
     }
 
 

@@ -32,5 +32,5 @@
         app:layout_constraintEnd_toEndOf="@+id/image_mission"
         app:layout_constraintStart_toStartOf="@+id/image_mission"
         app:layout_constraintTop_toTopOf="@+id/image_mission"
-        tools:text="Lesson 1"/>
+        tools:text="Mission 1" />
 </android.support.constraint.ConstraintLayout>

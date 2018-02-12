@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
-import com.ipoondev.android.psugo.adapters.MissionsRecyAdapter
+import com.ipoondev.android.psugo.adapters.MissionsRecyclerAdapter
 import com.ipoondev.android.psugo.model.Mission
 import kotlinx.android.synthetic.main.fragment_missions.*
 
 class MissionsFragment : Fragment() {
 
-    lateinit var adapter: MissionsRecyAdapter
+    lateinit var adapter: MissionsRecyclerAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_missions, container, false)
@@ -31,7 +31,7 @@ class MissionsFragment : Fragment() {
                 .setQuery(query, Mission::class.java)
                 .build()
 
-        adapter = MissionsRecyAdapter(options)
+        adapter = MissionsRecyclerAdapter(options)
         adapter.notifyDataSetChanged()
         recycler_missions.setHasFixedSize(true)
         recycler_missions.layoutManager = LinearLayoutManager(activity)

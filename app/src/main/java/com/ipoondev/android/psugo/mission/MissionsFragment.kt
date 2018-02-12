@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_missions.*
 class MissionsFragment : Fragment() {
 
     lateinit var adapter: MissionsRecyclerAdapter
+    lateinit var mFilterDialog: FilterDialogFragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_missions, container, false)
@@ -37,6 +38,11 @@ class MissionsFragment : Fragment() {
         recycler_missions.layoutManager = LinearLayoutManager(activity)
         recycler_missions.adapter = adapter
 
+        filter_bar.setOnClickListener {
+            onFilterClicked()
+        }
+
+        mFilterDialog = FilterDialogFragment()
     }
 
     override fun onStart() {
@@ -47,6 +53,10 @@ class MissionsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         adapter.stopListening()
+    }
+
+    private fun onFilterClicked() {
+        mFilterDialog.show(activity?.supportFragmentManager, FilterDialogFragment.TAG)
     }
 
 

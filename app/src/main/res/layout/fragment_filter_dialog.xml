@@ -1,0 +1,118 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout3"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.ipoondev.android.psugo.mission.FilterDialogFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/header_filters"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Mission Type -->
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7">
+
+        <ImageView
+            android:id="@+id/icon_mission"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            android:contentDescription="filter @string/value_any_mission"
+            android:tint="@color/greySecondary"
+            app:srcCompat="@drawable/ic_play_arrow_white_24px" />
+
+        <Spinner
+            android:id="@+id/spinner_mission"
+            style="@style/AppTheme.FilterSpinner"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/icon_mission"
+            android:entries="@array/missions" />
+
+    </RelativeLayout>
+
+    <!-- Subject Type -->
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+        <ImageView
+            android:id="@+id/icon_subject"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            android:contentDescription="filter @string/value_any_subject"
+            android:tint="@color/greySecondary"
+            app:srcCompat="@drawable/ic_subject_white_24px" />
+
+        <Spinner
+            android:id="@+id/spinner_subject"
+            style="@style/AppTheme.FilterSpinner"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/icon_subject"
+            android:entries="@array/subjects" />
+
+    </RelativeLayout>
+
+    <!-- Cancel and apply buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/button_cancel"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:textColor="@color/greySecondary"
+            android:theme="@style/ThemeOverlay.FilterButton" />
+
+
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/apply"
+            android:theme="@style/ThemeOverlay.FilterButton" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

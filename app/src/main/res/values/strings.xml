@@ -62,6 +62,8 @@
     <string-array name="missions">
         <item>@string/value_any_mission</item>
 
+        <item>Not started yet</item>
+        <item>Playing</item>
         <item>Pending</item>
         <item>Complete</item>
 

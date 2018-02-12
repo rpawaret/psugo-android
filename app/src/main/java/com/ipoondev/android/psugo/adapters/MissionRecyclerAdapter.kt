@@ -12,8 +12,8 @@ import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.model.Mission
 import kotlinx.android.synthetic.main.mission_list_item.view.*
 
-class MissionsRecyclerAdapter(options: FirestoreRecyclerOptions<Mission>) : FirestoreRecyclerAdapter<Mission, MissionsRecyclerAdapter.MissionsHolder>(options) {
-    private val TAG = MissionsRecyclerAdapter::class.simpleName
+class MissionRecyclerAdapter(options: FirestoreRecyclerOptions<Mission>) : FirestoreRecyclerAdapter<Mission, MissionRecyclerAdapter.MissionsHolder>(options) {
+    private val TAG = MissionRecyclerAdapter::class.simpleName
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MissionsHolder {
         val view = LayoutInflater.from(parent!!.context).inflate(R.layout.mission_list_item, parent, false)
         return MissionsHolder(view)

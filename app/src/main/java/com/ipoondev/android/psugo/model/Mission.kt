@@ -6,15 +6,19 @@ class Mission {
     var title: String? = null
     var image: String? = null
     var teacher: String? = null
+    var subject: String? = null
+    var state: String? = null
     var items: List<Item>? = emptyList()
 
     constructor() {}
 
-    constructor(id: Int, title: String, image: String, teacher: String, items: List<Item>) {
+    constructor(id: Int, title: String, image: String, teacher: String, subject: String, state: String, items: List<Item>) {
         this.id = id
         this.title = title
         this.image = image
         this.teacher = teacher
+        this.subject = subject
+        this.state = state
         this.items = items
     }
 }

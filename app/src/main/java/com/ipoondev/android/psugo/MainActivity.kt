@@ -5,7 +5,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.ipoondev.android.psugo.maps.MapsFragment
-import com.ipoondev.android.psugo.mission.MissionsFragment
+import com.ipoondev.android.psugo.mission.MissionFragment
 import com.ipoondev.android.psugo.profile.ProfileFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,7 +22,7 @@ private val TAG = MainActivity::class.simpleName
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_missions -> {
-                pushFragment(MissionsFragment())
+                pushFragment(MissionFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_maps -> {

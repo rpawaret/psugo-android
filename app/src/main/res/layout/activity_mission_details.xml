@@ -21,7 +21,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Lesson 1"/>
+        tools:text="Mission 1" />
 
     <TextView
         android:id="@+id/text_mission_detail_teacher"

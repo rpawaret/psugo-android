@@ -5,12 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.model.Mission
+import kotlinx.android.synthetic.main.mission_list_item.view.*
 
 class MissionsRecyAdapter(options: FirestoreRecyclerOptions<Mission>) : FirestoreRecyclerAdapter<Mission, MissionsRecyAdapter.MissionsHolder>(options) {
     private val TAG = MissionsRecyAdapter::class.simpleName
@@ -29,10 +29,10 @@ class MissionsRecyAdapter(options: FirestoreRecyclerOptions<Mission>) : Firestor
     }
 
     inner class MissionsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val missionName = itemView.findViewById<TextView>(R.id.text_mission_name)
+//        private val missionName = itemView.findViewById<TextView>(R.id.text_mission_name)
 
         fun bindMissions(mission: Mission) {
-            missionName?.text = mission.title
+            itemView.text_mission_name?.text = mission.title
         }
     }
 

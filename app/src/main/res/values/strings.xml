@@ -48,4 +48,7 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="unknown_error">An unknown error occurred</string>
 
+    <!--Filter-->
+    <string name="message_no_results">Oops, couldn\'t find any results\nthat matched your filter</string>
+
 </resources>

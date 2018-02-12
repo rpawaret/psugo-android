@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
         if (user?.photoUrl != null) {
             Picasso.with(activity)
                     .load(user?.photoUrl)
-                    .placeholder(R.drawable.ic_home_black_24dp)
+                    .placeholder(R.drawable.ic_account_circle_white_24px)
                     .resize(70, 70)
                     .centerCrop()
                     .into(image_profile)
@@ -141,7 +141,7 @@ class ProfileFragment : Fragment() {
         val docRef = FirebaseFirestore.getInstance().collection("items")
 
         for (item in DataService.items1) {
-            docRef.document(item.address!!).set(item)
+            docRef.document(item.name!!).set(item)
                     .addOnSuccessListener {
                         Log.d(TAG, "Items has been saved")
                     }

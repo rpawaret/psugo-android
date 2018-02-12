@@ -2,25 +2,43 @@ package com.ipoondev.android.psugo.mission
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
+import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.geofencing.Geofencing
-import com.ipoondev.android.psugo.services.DataService
-import com.ipoondev.android.psugo.utilities.EXTRA_MISSION_ID
+import com.ipoondev.android.psugo.model.Mission
 import kotlinx.android.synthetic.main.activity_mission_details.*
 
 class MissionDetailActivity : AppCompatActivity() {
     val TAG = MissionDetailActivity::class.simpleName
     var isStart = false
     private var geofencing: Geofencing? = null
+    lateinit var mFirestore: FirebaseFirestore
+    lateinit var mMission: Mission
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mission_details)
+        setSupportActionBar(toolbar_mission_detail)
+
         geofencing = Geofencing(this)
 
-        val lessonId = intent.getIntExtra(EXTRA_MISSION_ID, 0)
-        text_mission_detail_title.text = DataService.missions.get(0).title
+        val missionId = intent.extras.getString(EXTRA_MISSION_ID)
+                ?: throw IllegalArgumentException("Must pass extra $EXTRA_MISSION_ID")
+
+        mFirestore = FirebaseFirestore.getInstance()
+
+        val missionRef= mFirestore.collection("missions").document(missionId)
+
+        missionRef.get().addOnSuccessListener{ documentSnapshot ->
+            val mission = documentSnapshot.toObject(Mission::class.java)
+            toolbar_mission_detail.title = mission.name
+            text_mission_detail_owner.text = mission.ownerName
+
+        }.addOnFailureListener { exception ->
+                    Log.e(TAG, exception.localizedMessage)
+                }
 
         button_start.setOnClickListener {
 
@@ -39,11 +57,9 @@ class MissionDetailActivity : AppCompatActivity() {
         isStart = true
         Toast.makeText(this, "You start play mission", Toast.LENGTH_LONG).show()
 
-//        GeofencingService.createGeofenceList(DataService.items1)
-        geofencing!!.populateGeofenceList(DataService.items2)
+//        geofencing!!.populateGeofenceList(DataService.items2)
 
-//        GeofencingService.registerAllGeofences(this)
-        geofencing?.performPendingGeofenceTask("ADD")
+//        geofencing?.performPendingGeofenceTask("ADD")
 
         // TODO if register geofence successful then create Marker and display it on map
 //        if (GeofencingService.isRegisterComplete) {
@@ -66,4 +82,7 @@ class MissionDetailActivity : AppCompatActivity() {
     }
 
 
+    companion object {
+        val EXTRA_MISSION_ID = "key_mission_id"
+    }
 }

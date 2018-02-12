@@ -1,25 +1,40 @@
 package com.ipoondev.android.psugo.model
 
+import android.text.TextUtils
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.ServerTimestamp
+import java.util.*
+
 
 class Mission {
-    var id: Int = 0
-    var title: String? = null
-    var image: String? = null
-    var teacher: String? = null
+    var ownerId: String? = null
+    var ownerName: String? = null
+    var name: String? = null
+    var detail: String? = null
     var subject: String? = null
     var state: String? = null
-    var items: List<Item>? = emptyList()
+    var photo: String? = null
+    var numPlayer: Int = 0
+    @ServerTimestamp
+    var timestamp: Date? = null
 
     constructor() {}
 
-    constructor(id: Int, title: String, image: String, teacher: String, subject: String, state: String, items: List<Item>) {
-        this.id = id
-        this.title = title
-        this.image = image
-        this.teacher = teacher
+    constructor(user: FirebaseUser, name: String, detail: String, subject: String, state: String, photo: String, numPlayer: Int, timestamp: Date?) {
+        this.ownerId = user.uid
+        this.ownerName = user.displayName
+        if (TextUtils.isEmpty(this.ownerName)) {
+            this.ownerName = user.email
+        }
+        this.name = name
+        this.detail = detail
         this.subject = subject
         this.state = state
-        this.items = items
+        this.photo = photo
+        this.numPlayer = numPlayer
+        this.timestamp = timestamp
     }
+
+
 }
 

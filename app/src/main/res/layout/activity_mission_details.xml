@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ipoondev.android.psugo.mission.MissionDetailActivity">
 
-    <TextView
-        android:id="@+id/text_mission_detail_title"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_mission_detail"
         android:layout_width="0dp"
-        android:layout_height="42dp"
-        android:background="@color/colorPrimary"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:gravity="center"
+        android:minHeight="?attr/actionBarSize"
         android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Mission 1" />
+        app:title="My Homee"
+        app:titleTextColor="@android:color/white"
+        tools:titleTextColor="@android:color/white" />
 
     <TextView
-        android:id="@+id/text_mission_detail_teacher"
+        android:id="@+id/text_mission_detail_owner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Teacher: Pawares Rukkumnerd"
+        android:layout_marginTop="63dp"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_mission_detail_title"
-        tools:text="Teacher: Pawares Rukkumnerd"/>
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_mission_detail"
+        tools:text="Teacher: Pawares Rukkumnerd" />
 
     <Button
         android:id="@+id/button_start"
@@ -47,18 +47,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="144dp"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_mission_detail_teacher">
+        app:layout_constraintTop_toBottomOf="@+id/text_mission_detail_owner">
 
         <android.support.v7.widget.CardView
             android:id="@+id/cardView"
@@ -74,12 +75,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="ภารกิจ: เดินหาไอเท็ม ที่อยู่ในบริเวณรั้วมหาวิทยาลัยสงขลานครนทร์ และ ร่วมตอบคำถาม"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.625"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="8dp"/>
+                tools:layout_editor_absoluteX="8dp"
+                tools:text="ภารกิจ: เดินหาไอเท็ม ที่อยู่ในบริเวณรั้วมหาวิทยาลัยสงขลานครนทร์ และ ร่วมตอบคำถา" />
 
         </android.support.v7.widget.CardView>
 
@@ -99,12 +100,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:text="ตำแหน่ง : คณะวิศวคอมพิวเตอร์ คณะวิทยาศาสตร์ ศูนย์คอมพิวเตอร์ คณะศิลปศาสตร์ โรงพยาบาลสงขลานครินทร์"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5"/>
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                tools:text="ตำแหน่ง : คณะวิศวคอมพิวเตอร์ คณะวิทยาศาสตร์ ศูนย์คอมพิวเตอร์ คณะศิลปศาสตร์ โรงพยาบาลสงขลานครินทร" />
 
         </android.support.v7.widget.CardView>
     </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>

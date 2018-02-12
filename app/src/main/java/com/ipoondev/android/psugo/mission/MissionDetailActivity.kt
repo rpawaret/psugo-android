@@ -9,8 +9,8 @@ import com.ipoondev.android.psugo.services.DataService
 import com.ipoondev.android.psugo.utilities.EXTRA_MISSION_ID
 import kotlinx.android.synthetic.main.activity_mission_details.*
 
-class MissionDetailsActivity : AppCompatActivity() {
-    val TAG = MissionDetailsActivity::class.simpleName
+class MissionDetailActivity : AppCompatActivity() {
+    val TAG = MissionDetailActivity::class.simpleName
     var isStart = false
     private var geofencing: Geofencing? = null
 

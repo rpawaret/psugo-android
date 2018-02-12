@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
-import com.ipoondev.android.psugo.adapters.MissionsRecyclerAdapter
+import com.ipoondev.android.psugo.adapters.MissionRecyclerAdapter
 import com.ipoondev.android.psugo.model.Mission
 import kotlinx.android.synthetic.main.fragment_missions.*
 
-class MissionsFragment : Fragment() {
+class MissionFragment : Fragment() {
 
-    lateinit var adapter: MissionsRecyclerAdapter
+    lateinit var adapter: MissionRecyclerAdapter
     lateinit var mFilterDialog: FilterDialogFragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,7 +32,7 @@ class MissionsFragment : Fragment() {
                 .setQuery(query, Mission::class.java)
                 .build()
 
-        adapter = MissionsRecyclerAdapter(options)
+        adapter = MissionRecyclerAdapter(options)
         adapter.notifyDataSetChanged()
         recycler_missions.setHasFixedSize(true)
         recycler_missions.layoutManager = LinearLayoutManager(activity)

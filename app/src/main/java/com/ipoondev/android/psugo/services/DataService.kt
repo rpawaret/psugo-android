@@ -26,9 +26,8 @@ object DataService {
     )
 
     val missions = listOf(
-            Mission(1, "Mission 1", "shirtimage","Pawares Rukkumnerd", items1),
-            Mission(2, "มารู้จัก มอ กันเถอะ", "hoodieimage","IBOT", items2)
-
+            Mission(1, "Mission 1", "shirtimage","Pawares Rukkumnerd", "Math", "Playing", items1),
+            Mission(2, "มารู้จัก มอ กันเถอะ", "hoodieimage","IBOT","English","", items2)
     )
 
     val player =  listOf(

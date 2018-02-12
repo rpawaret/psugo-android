@@ -1,8 +1,10 @@
 package com.ipoondev.android.psugo.mission
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +34,12 @@ class MissionFragment : Fragment() {
                 .setQuery(query, Mission::class.java)
                 .build()
 
-        adapter = MissionRecyclerAdapter(options)
+        adapter = MissionRecyclerAdapter(options) { documentSnapshot ->
+            Log.d(TAG, "missionId: ${documentSnapshot.id}")
+            val intent = Intent(activity, MissionDetailActivity::class.java)
+            intent.putExtra(MissionDetailActivity.EXTRA_MISSION_ID, documentSnapshot.id)
+            startActivity(intent)
+        }
         adapter.notifyDataSetChanged()
         recycler_missions.setHasFixedSize(true)
         recycler_missions.layoutManager = LinearLayoutManager(activity)
@@ -59,6 +66,9 @@ class MissionFragment : Fragment() {
         mFilterDialog.show(activity?.supportFragmentManager, FilterDialogFragment.TAG)
     }
 
+    companion object {
+        val TAG = MissionFragment::class.simpleName
+    }
 
 }
 

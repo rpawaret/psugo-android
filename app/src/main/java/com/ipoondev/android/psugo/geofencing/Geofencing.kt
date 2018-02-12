@@ -51,7 +51,7 @@ class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
 
         for (item in items) {
             val geofence = Geofence.Builder()
-                    .setRequestId(item.address)
+                    .setRequestId(item.name)
                     .setExpirationDuration((item.timeout!!.times(60).times(60).times(1000)))
                     .setCircularRegion(item.geoPoint!!.latitude, item.geoPoint!!.longitude, item.radius!!)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)

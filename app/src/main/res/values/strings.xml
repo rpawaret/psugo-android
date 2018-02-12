@@ -51,4 +51,29 @@
     <!--Filter-->
     <string name="message_no_results">Oops, couldn\'t find any results\nthat matched your filter</string>
 
+    <string name="header_filters">Filter</string>
+
+    <string name="value_any_mission">All Mission</string>
+    <string name="value_any_subject">All Subject</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="apply">Apply</string>
+
+    <string-array name="missions">
+        <item>@string/value_any_mission</item>
+
+        <item>Pending</item>
+        <item>Complete</item>
+
+    </string-array>
+
+    <string-array name="subjects">
+        <item>@string/value_any_subject</item>
+
+        <item>Math</item>
+        <item>English</item>
+        <item>Science</item>
+
+    </string-array>
+
 </resources>

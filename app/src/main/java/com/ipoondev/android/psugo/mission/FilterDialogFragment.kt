@@ -15,11 +15,13 @@ class FilterDialogFragment : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         mRootView = inflater.inflate(R.layout.fragment_filter_dialog, container, false)
+
         return mRootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
         button_search.setOnClickListener {
             onSearchClicked()
         }
@@ -27,6 +29,11 @@ class FilterDialogFragment : DialogFragment() {
         button_cancel.setOnClickListener {
             onCancelClicked()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        dialog.window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     fun onSearchClicked() {

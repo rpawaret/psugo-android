@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Mission Type -->
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/relativeLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -33,22 +33,28 @@
         <ImageView
             android:id="@+id/icon_mission"
             style="@style/AppTheme.FilterIcon"
-            android:layout_centerVertical="true"
             android:contentDescription="filter @string/value_any_mission"
             android:tint="@color/greySecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_play_arrow_white_24px" />
 
         <Spinner
             android:id="@+id/spinner_mission"
             style="@style/AppTheme.FilterSpinner"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/icon_mission"
-            android:entries="@array/missions" />
+            android:layout_width="0dp"
+            android:layout_marginStart="8dp"
+            android:entries="@array/missions"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icon_mission"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <!-- Subject Type -->
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/relativeLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -61,22 +67,29 @@
         <ImageView
             android:id="@+id/icon_subject"
             style="@style/AppTheme.FilterIcon"
-            android:layout_centerVertical="true"
             android:contentDescription="filter @string/value_any_subject"
             android:tint="@color/greySecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_subject_white_24px" />
 
         <Spinner
             android:id="@+id/spinner_subject"
             style="@style/AppTheme.FilterSpinner"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/icon_subject"
-            android:entries="@array/subjects" />
+            android:layout_width="0dp"
+            android:layout_marginStart="8dp"
+            android:entries="@array/subjects"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icon_subject"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <!-- Cancel and apply buttons -->
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -86,33 +99,36 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2"
+        app:layout_constraintVertical_bias="1.0">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
         <Button
             android:id="@+id/button_cancel"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
             android:text="@string/cancel"
             android:textColor="@color/greySecondary"
-            android:theme="@style/ThemeOverlay.FilterButton" />
+            android:theme="@style/ThemeOverlay.FilterButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_search"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <Button
             android:id="@+id/button_search"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/apply"
-            android:theme="@style/ThemeOverlay.FilterButton" />
+            android:theme="@style/ThemeOverlay.FilterButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

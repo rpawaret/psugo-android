@@ -10,12 +10,13 @@
         android:id="@+id/image_mission"
         android:layout_width="0dp"
         android:layout_height="150dp"
+        android:contentDescription="mission image"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/hatimage"/>
+        app:srcCompat="@drawable/hatimage" />
 
     <TextView
         android:id="@+id/text_mission_name"
@@ -33,4 +34,38 @@
         app:layout_constraintStart_toStartOf="@+id/image_mission"
         app:layout_constraintTop_toTopOf="@+id/image_mission"
         tools:text="Mission 1" />
+
+    <TextView
+        android:id="@+id/text_mission_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/image_mission"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Math" />
+
+    <TextView
+        android:id="@+id/text_mission_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/image_mission"
+        app:layout_constraintStart_toEndOf="@+id/text_mission_subject"
+        tools:text="Pawares Rukkumnerd" />
+
+    <TextView
+        android:id="@+id/text_mission_num_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/image_mission"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="7 Players" />
+
 </android.support.constraint.ConstraintLayout>

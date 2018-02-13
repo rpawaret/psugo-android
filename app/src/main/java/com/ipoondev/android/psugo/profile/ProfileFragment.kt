@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.profile_header_main.*
 
 class ProfileFragment : Fragment() {
     private val TAG = ProfileFragment::class.simpleName
-    private var user: FirebaseUser? = null
+    private var currentUser: FirebaseUser? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -32,10 +32,10 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        user = FirebaseAuth.getInstance().currentUser
+        currentUser = FirebaseAuth.getInstance().currentUser
 
         button_profile_login.setOnClickListener {
-            if (user == null) {
+            if (currentUser == null) {
                 signIn()
             } else {
                 signOut()
@@ -64,16 +64,17 @@ class ProfileFragment : Fragment() {
     }
 
     private fun populateProfile() {
-        if (user?.photoUrl != null) {
+        if (currentUser?.photoUrl != null) {
             Picasso.with(activity)
-                    .load(user?.photoUrl)
+                    .load(currentUser?.photoUrl)
                     .placeholder(R.drawable.ic_account_circle_white_24px)
                     .resize(70, 70)
                     .centerCrop()
                     .into(image_profile)
         }
-        text_user_name.text = user?.displayName ?: "No User"
-        text_user_email.text = user?.email ?: "No email"
+        text_user_name.text = currentUser?.displayName ?: "No User"
+        text_user_email.text = currentUser?.email ?: "No email"
+        text_user_uid.text = currentUser?.uid ?: "No uid"
     }
 
     private fun signIn() {
@@ -102,7 +103,7 @@ class ProfileFragment : Fragment() {
 
 
     private fun updateLoginButton() {
-        if (user == null) {
+        if (currentUser == null) {
             button_profile_login.text = "Log in"
         } else {
             button_profile_login.text = "Log out"
@@ -141,7 +142,7 @@ class ProfileFragment : Fragment() {
         val docRef = FirebaseFirestore.getInstance().collection("items")
 
         for (item in DataService.items1) {
-            docRef.document(item.name!!).set(item)
+            docRef.document().set(item)
                     .addOnSuccessListener {
                         Log.d(TAG, "Items has been saved")
                     }

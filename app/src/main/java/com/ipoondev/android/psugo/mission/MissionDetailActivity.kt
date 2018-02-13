@@ -3,19 +3,22 @@ package com.ipoondev.android.psugo.mission
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.geofencing.Geofencing
+import com.ipoondev.android.psugo.model.Item
 import com.ipoondev.android.psugo.model.Mission
 import kotlinx.android.synthetic.main.activity_mission_details.*
+import java.util.*
+
 
 class MissionDetailActivity : AppCompatActivity() {
     val TAG = MissionDetailActivity::class.simpleName
     var isStart = false
     private var geofencing: Geofencing? = null
     lateinit var mFirestore: FirebaseFirestore
-    lateinit var mMission: Mission
+    lateinit var missionId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,21 +27,39 @@ class MissionDetailActivity : AppCompatActivity() {
 
         geofencing = Geofencing(this)
 
-        val missionId = intent.extras.getString(EXTRA_MISSION_ID)
+        missionId = intent.extras.getString(EXTRA_MISSION_ID)
                 ?: throw IllegalArgumentException("Must pass extra $EXTRA_MISSION_ID")
 
         mFirestore = FirebaseFirestore.getInstance()
 
-        val missionRef= mFirestore.collection("missions").document(missionId)
+        val missionRef = mFirestore.collection("missions").document(missionId)
 
-        missionRef.get().addOnSuccessListener{ documentSnapshot ->
+        missionRef.get().addOnSuccessListener { documentSnapshot ->
             val mission = documentSnapshot.toObject(Mission::class.java)
             toolbar_mission_detail.title = mission.name
+            text_mission_detail_detail.text = mission.detail
+            text_mission_detail_subject.text = mission.subject
             text_mission_detail_owner.text = mission.ownerName
 
         }.addOnFailureListener { exception ->
                     Log.e(TAG, exception.localizedMessage)
                 }
+
+        val itemsRef = mFirestore.collection("missions").document(missionId).collection("items")
+        itemsRef.get().addOnCompleteListener { task ->
+            val items = ArrayList<Item>()
+            if (task.isSuccessful) {
+                for (document in task.result) {
+//                    Log.d(TAG, "${document.id} ${document.data}")
+                    val item = document.toObject(Item::class.java)
+                    items.add(item)
+                    text_mission_detail_items.text = "${document.data}"
+                }
+
+            } else {
+                Log.d(TAG, "Error getting documents: ", task.exception);
+            }
+        }
 
         button_start.setOnClickListener {
 
@@ -55,7 +76,54 @@ class MissionDetailActivity : AppCompatActivity() {
 
     fun startMission() {
         isStart = true
-        Toast.makeText(this, "You start play mission", Toast.LENGTH_LONG).show()
+        val playerId = FirebaseAuth.getInstance().currentUser!!.uid
+
+//        val myMission = HashMap<String, Any>()
+//        myMission.put("missionId", missionId)
+//        myMission.put("score", 0)
+//        myMission.put("state", "Playing")
+//
+//        FirebaseFirestore.getInstance()
+//                .collection("players").document(playerId)
+//                .collection("myMissions").document(missionId)
+//                .set(myMission)
+//                .addOnCompleteListener {
+//                    Log.d(TAG, "add complete")
+//
+//                }.addOnFailureListener {
+//                    Log.d(TAG, it.localizedMessage)
+//                }
+
+        mFirestore.collection("players")
+                .whereEqualTo("playerId", playerId)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        for (document in it.getResult()) {
+                            Log.d(TAG, document.getId() + " => " + document.getData())
+                        }
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", it.getException());
+                    }
+                }
+
+
+//        FirebaseFirestore.getInstance().
+//                collection("players").document(playerId)
+//                .update("score", 2)
+//                .addOnCompleteListener {
+//                    Log.d(TAG, "Update complete")
+//                }.addOnFailureListener {
+//                    Log.d(TAG, it.localizedMessage)
+//                }
+//        FirebaseFirestore.getInstance().collection("").add("document")
+//        FirebaseFirestore.getInstance().collection().document().set()
+
+//        playersRef.get()
+//                .addOnSuccessListener {documentSnapshot ->
+//                    val player = documentSnapshot.toObject(Player::class.java)
+//                    Log.d(TAG, "${player.playerName} ${player.playerId} ${player.score}")
+//                }
 
 //        geofencing!!.populateGeofenceList(DataService.items2)
 
@@ -73,11 +141,10 @@ class MissionDetailActivity : AppCompatActivity() {
 
     fun stopMission() {
         isStart = false
-        Toast.makeText(this, "You stop play mission Complete", Toast.LENGTH_LONG).show()
 
         // TODO unregister geofences
 //        GeofencingService.unRegisterAllGeofences(this)
-        geofencing?.performPendingGeofenceTask("REMOVE")
+//        geofencing?.performPendingGeofenceTask("REMOVE")
         // TODO remove item's marker
     }
 

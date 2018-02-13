@@ -10,7 +10,9 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.ipoondev.android.psugo.MainActivity
 import com.ipoondev.android.psugo.R
+import com.ipoondev.android.psugo.services.afterSignIn
 import kotlinx.android.synthetic.main.activity_auth_ui.*
+import java.util.*
 
 class AuthUiActivity : AppCompatActivity() {
     private val TAG = AuthUiActivity::class.simpleName
@@ -36,9 +38,11 @@ class AuthUiActivity : AppCompatActivity() {
                         .build(),
                 RC_SIGN_IN
         )
+
+
     }
 
-    private fun getSelectedProviders() : MutableList<AuthUI.IdpConfig>{
+    private fun getSelectedProviders(): MutableList<AuthUI.IdpConfig> {
         val selectedProviders = ArrayList<AuthUI.IdpConfig>()
         selectedProviders.add(AuthUI.IdpConfig.GoogleBuilder().build())
         selectedProviders.add(AuthUI.IdpConfig.EmailBuilder().build())
@@ -64,6 +68,7 @@ class AuthUiActivity : AppCompatActivity() {
         // Successfully signed in
         if (resultCode == RESULT_OK) {
             Log.d(TAG, "SIGN IN SUCCESSFUL")
+            afterSignIn()
             startMainActivity()
             finish()
             return
@@ -97,5 +102,7 @@ class AuthUiActivity : AppCompatActivity() {
         val mainIntent = Intent(this, MainActivity::class.java)
         startActivity(mainIntent)
     }
+
+
 
 }

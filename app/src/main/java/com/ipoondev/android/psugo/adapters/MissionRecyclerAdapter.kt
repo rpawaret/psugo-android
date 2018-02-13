@@ -39,6 +39,9 @@ class MissionRecyclerAdapter(options: FirestoreRecyclerOptions<Mission>, val ite
 
         fun bindMissions(mission: Mission, documentSnapshot: DocumentSnapshot) {
             itemView.text_mission_name?.text = mission.name
+            itemView.text_mission_subject.text = mission.subject
+            itemView.text_mission_owner.text = mission.ownerName
+            itemView.text_mission_num_player.text = "${mission.numPlayer} Players"
 
             itemView.setOnClickListener {
                 itemClick(documentSnapshot)

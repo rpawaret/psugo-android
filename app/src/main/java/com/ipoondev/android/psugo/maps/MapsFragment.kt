@@ -14,10 +14,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
+import com.ipoondev.android.psugo.model.Item
 import com.ipoondev.android.psugo.utilities.BROADCAST_GEOFENCE_TRANSITION_ENTER
 import com.ipoondev.android.psugo.utilities.BROADCAST_REGISTER_GEOFENCE_COMPLELE
 
@@ -25,9 +31,24 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private val TAG = MapsFragment::class.simpleName
     private lateinit var mMap: GoogleMap
     private lateinit var mMapFragment: MapFragment
+    lateinit var mFirestore: FirebaseFirestore
+    lateinit var playerId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mFirestore = FirebaseFirestore.getInstance()
+        playerId = FirebaseAuth.getInstance().currentUser!!.uid
+
+//        Log.d(TAG, "onCreate() : $missionId")
+
+//        val itemList = getAllItems(missionId)
+
+//        checkNotNull(getCurrentMissionId()).apply {
+//            getAllItems(this)
+//        }
+
+        // GET all items from Mission
+//        val missionRef = mFirestore.collection("missions").document(currentMissionId)
 
         LocalBroadcastManager.getInstance(activity!!).registerReceiver(registerGeofenceCompleteReceiver,
                 IntentFilter(BROADCAST_REGISTER_GEOFENCE_COMPLELE))
@@ -38,7 +59,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private val registerGeofenceCompleteReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            // TODO create item's marker then display on map
             Toast.makeText(activity, "Receive register geofence complete signal", Toast.LENGTH_LONG).show()
             Log.d(TAG, "Receive register geofence complete signal")
         }
@@ -65,6 +85,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        Log.d(TAG, "onMapReady() : hit")
         mMap = googleMap
 
         if (ActivityCompat.checkSelfPermission(activity!!, android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -76,10 +97,65 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         uiSettings.isCompassEnabled = true
         uiSettings.isZoomControlsEnabled = true
 
+        getItemList()
 
     }
 
-    fun displayMarker() {
+    // GET currentMissionId
+    private fun getItemList(): ArrayList<Item> {
+        var itemList = ArrayList<Item>()
+        var currentMissionId: String? = null
+
+        val playerRef = mFirestore.collection("players").document(playerId)
+        playerRef.get().addOnCompleteListener { task ->
+           if (task.isSuccessful) {
+                 currentMissionId = task.result.data["currentMissionId"].toString()
+                Log.d(TAG, "$currentMissionId")
+                itemList = getAllItems(currentMissionId!!)
+           }
+
+        }.addOnFailureListener {
+
+                }
+        return itemList
+    }
+
+    private fun getAllItems(missionId: String): ArrayList<Item> {
+        val itemList = ArrayList<Item>()
+
+        val itemsRef = mFirestore.collection("missions").document(missionId)
+                .collection("items")
+        itemsRef.get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (itemDocument in task.result) {
+                            Log.d(TAG, "${itemDocument.id} => ${itemDocument.data}")
+                            val item = itemDocument.toObject(Item::class.java)
+                            itemList.add(item)
+                            displayMarker(itemList)
+                        }
+                    } else {
+                        Log.d(TAG, "Error getting document: ${task.exception}")
+                    }
+                }
+
+        return itemList
+    }
+
+    private fun displayMarker(itemList: ArrayList<Item>) {
+
+        itemList.forEach { item ->
+            val latLng = LatLng(item.geoPoint!!.latitude, item.geoPoint!!.longitude)
+            mMap.addMarker(MarkerOptions().
+                    position(latLng)
+                    .title(item.name))
+//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15F))
+        }
+
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                LatLng(itemList[0].geoPoint!!.latitude,
+                        itemList[0].geoPoint!!.longitude), 15F))
 
     }
 

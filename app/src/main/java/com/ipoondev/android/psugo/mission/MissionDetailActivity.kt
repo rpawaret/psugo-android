@@ -66,7 +66,7 @@ class MissionDetailActivity : AppCompatActivity() {
         myMissionRef.get()
                 .addOnCompleteListener {
                     checkNotNull(it).apply {
-                        Log.d(TAG, "DocumentSnapshot data: " + this.result.data)
+//                        Log.d(TAG, "DocumentSnapshot data: " + this.result.data)
                         val myMission = this.result.toObject(MyMission::class.java)
                         button_play.text = myMission.state
                     }

@@ -12,9 +12,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 private val TAG = MainActivity::class.simpleName
 
+    lateinit var missionFragment: MissionFragment
+    lateinit var mapsFragment: MapsFragment
+    lateinit var profileFragment: ProfileFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (savedInstanceState == null) {
+            missionFragment = MissionFragment()
+            mapsFragment = MapsFragment()
+            profileFragment = ProfileFragment()
+        }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
@@ -22,15 +32,15 @@ private val TAG = MainActivity::class.simpleName
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_missions -> {
-                pushFragment(MissionFragment())
+                pushFragment(missionFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_maps -> {
-                pushFragment(MapsFragment())
+                pushFragment(mapsFragment)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
-                pushFragment(ProfileFragment())
+                pushFragment(profileFragment)
                 return@OnNavigationItemSelectedListener true
             }
         }

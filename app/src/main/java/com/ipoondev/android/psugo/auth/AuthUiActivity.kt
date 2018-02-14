@@ -22,13 +22,10 @@ class AuthUiActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth_ui)
-        Log.d(TAG, "onCreate(): hit")
-
         signIn()
     }
 
     private fun signIn() {
-        Log.d(TAG, "singIn(): hit")
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -38,8 +35,6 @@ class AuthUiActivity : AppCompatActivity() {
                         .build(),
                 RC_SIGN_IN
         )
-
-
     }
 
     private fun getSelectedProviders(): MutableList<AuthUI.IdpConfig> {
@@ -52,7 +47,6 @@ class AuthUiActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d(TAG, "onActivityResult(): hit")
         if (requestCode == RC_SIGN_IN) {
             handleSignInResponse(resultCode, data)
             return
@@ -62,7 +56,6 @@ class AuthUiActivity : AppCompatActivity() {
     }
 
     private fun handleSignInResponse(resultCode: Int, data: Intent?) {
-        Log.d(TAG, "handleSignInResponse(): hit")
         val response = IdpResponse.fromResultIntent(data)
 
         // Successfully signed in
@@ -102,7 +95,5 @@ class AuthUiActivity : AppCompatActivity() {
         val mainIntent = Intent(this, MainActivity::class.java)
         startActivity(mainIntent)
     }
-
-
 
 }

@@ -9,6 +9,7 @@ import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.geofencing.Geofencing
 import com.ipoondev.android.psugo.model.Item
 import com.ipoondev.android.psugo.model.Mission
+import com.ipoondev.android.psugo.model.MyMission
 import kotlinx.android.synthetic.main.activity_mission_details.*
 import java.util.*
 
@@ -38,8 +39,8 @@ class MissionDetailActivity : AppCompatActivity() {
             val mission = documentSnapshot.toObject(Mission::class.java)
             toolbar_mission_detail.title = mission.name
             text_mission_detail_detail.text = mission.detail
-            text_mission_detail_subject.text = mission.subject
-            text_mission_detail_owner.text = mission.ownerName
+            text_mission_detail_subject.text = "Subject: ${mission.subject}"
+            text_mission_detail_owner.text = "Teacher: ${mission.ownerName}"
 
         }.addOnFailureListener { exception ->
                     Log.e(TAG, exception.localizedMessage)
@@ -76,67 +77,29 @@ class MissionDetailActivity : AppCompatActivity() {
 
     fun startMission() {
         isStart = true
+
         val playerId = FirebaseAuth.getInstance().currentUser!!.uid
+        val batch = FirebaseFirestore.getInstance().batch()
 
-//        val myMission = HashMap<String, Any>()
-//        myMission.put("missionId", missionId)
-//        myMission.put("score", 0)
-//        myMission.put("state", "Playing")
-//
-//        FirebaseFirestore.getInstance()
-//                .collection("players").document(playerId)
-//                .collection("myMissions").document(missionId)
-//                .set(myMission)
-//                .addOnCompleteListener {
-//                    Log.d(TAG, "add complete")
-//
-//                }.addOnFailureListener {
-//                    Log.d(TAG, it.localizedMessage)
-//                }
+        // TODO set the new document in myMissions subcollection
+        val myMissionsRef = FirebaseFirestore.getInstance()
+                .collection("players").document(playerId)
+                .collection("myMissions").document(missionId)
+        batch.set(myMissionsRef, MyMission(missionId, 0, "Playing"))
 
-        mFirestore.collection("players")
-                .whereEqualTo("playerId", playerId)
-                .get()
+        // TODO update the currentMissionId field in playerId document
+        val playerIdRef = FirebaseFirestore.getInstance()
+                .collection("players").document(playerId)
+
+        batch.update(playerIdRef, "currentMissionId", missionId)
+
+        // TODO commit
+        batch.commit()
                 .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        for (document in it.getResult()) {
-                            Log.d(TAG, document.getId() + " => " + document.getData())
-                        }
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", it.getException());
-                    }
+                    Log.d(TAG, "Add myMission Document and update currentMissionId successful")
+                }.addOnFailureListener {
+                    Log.d(TAG, "ADD and UPDATE failed")
                 }
-
-
-//        FirebaseFirestore.getInstance().
-//                collection("players").document(playerId)
-//                .update("score", 2)
-//                .addOnCompleteListener {
-//                    Log.d(TAG, "Update complete")
-//                }.addOnFailureListener {
-//                    Log.d(TAG, it.localizedMessage)
-//                }
-//        FirebaseFirestore.getInstance().collection("").add("document")
-//        FirebaseFirestore.getInstance().collection().document().set()
-
-//        playersRef.get()
-//                .addOnSuccessListener {documentSnapshot ->
-//                    val player = documentSnapshot.toObject(Player::class.java)
-//                    Log.d(TAG, "${player.playerName} ${player.playerId} ${player.score}")
-//                }
-
-//        geofencing!!.populateGeofenceList(DataService.items2)
-
-//        geofencing?.performPendingGeofenceTask("ADD")
-
-        // TODO if register geofence successful then create Marker and display it on map
-//        if (GeofencingService.isRegisterComplete) {
-//            // TODO send notify to MapsFragment for display item's marker
-//            val registerGeofenceComplete = Intent(BROADCAST_REGISTER_GEOFENCE_COMPLELE)
-//            val isComplete = LocalBroadcastManager.getInstance(this).sendBroadcast(registerGeofenceComplete)
-//            Log.d(TAG, "send register complete signal to MapsFragment is Complete: $isComplete")
-//        }
-
     }
 
     fun stopMission() {

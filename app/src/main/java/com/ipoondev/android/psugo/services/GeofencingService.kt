@@ -12,14 +12,11 @@ import com.ipoondev.android.psugo.model.Item
 
 object GeofencingService {
 
-    private val pendingIntent: PendingIntent?
+    private val pendingIntent: PendingIntent? = null
     lateinit var geofenceList: MutableList<Geofence>
     var isRegisterComplete = false
     var isUnregisterComplete = false
 
-    init {
-        pendingIntent = null
-    }
     fun createGeofenceList(items: List<Item>) {
 
         geofenceList = arrayListOf()

@@ -44,7 +44,7 @@ fun afterSignIn() {
             batch.set(rootDocument, newPlayer)
 
             batch.commit().addOnCompleteListener {
-                println("thes is a new user")
+                println("this is a new user")
 //                initNewPlayer()
             }
 
@@ -54,5 +54,29 @@ fun afterSignIn() {
     }
 }
 
+fun isNewPlayer() : Boolean{
+    val metadata = FirebaseAuth.getInstance().currentUser?.metadata ?: throw IllegalStateException("Don't have user")
+    var isNewPlayer = metadata.creationTimestamp == metadata.lastSignInTimestamp
+    return isNewPlayer
 
+}
+
+fun initNewPlayer() {
+    val batch = createWriteBatch()
+    val newPlayer = Player(loggedInUser()!!, 0, "", Date())
+    val rootDocument = rootDocument()
+            ?: throw IllegalStateException("root document not found")
+
+    batch.set(rootDocument, newPlayer)
+    batch.commit().addOnCompleteListener {
+        if (it.isSuccessful) {
+            println("this is new user")
+        } else {
+            println("don't ")
+        }
+
+    }.addOnFailureListener { exception ->
+                println("this is not new user: ${exception.localizedMessage}")
+            }
+}
 

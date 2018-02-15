@@ -6,11 +6,11 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
+import com.ipoondev.android.psugo.geofencing.Geofencing
 import com.ipoondev.android.psugo.model.Item
 import com.ipoondev.android.psugo.model.Mission
 import com.ipoondev.android.psugo.model.MyMission
 import kotlinx.android.synthetic.main.activity_mission_details.*
-import java.util.*
 
 
 class MissionDetailActivity : AppCompatActivity() {
@@ -48,12 +48,14 @@ class MissionDetailActivity : AppCompatActivity() {
         itemsRef.get().addOnCompleteListener { task ->
             val items = ArrayList<Item>()
             if (task.isSuccessful) {
+                val area = StringBuilder()
                 for (document in task.result) {
 //                    Log.d(TAG, "${document.id} ${document.data}")
                     val item = document.toObject(Item::class.java)
                     items.add(item)
-                    text_mission_detail_items.text = "${document.data}"
+                    area.append(" ${document.data["name"]}")
                 }
+                text_mission_detail_items.text = area
 
             } else {
                 Log.d(TAG, "Error getting documents: ", task.exception);
@@ -89,8 +91,21 @@ class MissionDetailActivity : AppCompatActivity() {
 
     fun playMission() {
 
-        val batch = FirebaseFirestore.getInstance().batch()
+        FirebaseFirestore.getInstance().collection("missions").document(missionId)
+                .collection("items")
+                .get()
+                .addOnCompleteListener { task ->
+                    val itemList = ArrayList<Item>()
+                        for (document in task.result) {
+                            val item = document.toObject(Item::class.java)
+                            itemList.add(item)
+                        }
+                    val geofencing = Geofencing(this, itemList)
+                    geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.ADD)
+                    }
 
+
+        val batch = FirebaseFirestore.getInstance().batch()
         // set the new document in myMissions subcollection
         val myMissionsRef = FirebaseFirestore.getInstance()
                 .collection("players").document(playerId)
@@ -115,6 +130,19 @@ class MissionDetailActivity : AppCompatActivity() {
     }
 
     fun pauseMission() {
+
+        FirebaseFirestore.getInstance().collection("missions").document(missionId)
+                .collection("items")
+                .get()
+                .addOnCompleteListener { task ->
+                    val itemList = ArrayList<Item>()
+                    for (document in task.result) {
+                        val item = document.toObject(Item::class.java)
+                        itemList.add(item)
+                    }
+                    val geofencing = Geofencing(this, itemList)
+                    geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.REMOVE)
+                }
 
         val batch = FirebaseFirestore.getInstance().batch()
 

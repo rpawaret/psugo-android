@@ -13,17 +13,20 @@ import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
-import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.model.Item
 
 
-class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
+class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCompleteListener<Void> {
     private val mGeofencingClient: GeofencingClient = LocationServices.getGeofencingClient(mContext)
     private val mGeofenceList: ArrayList<Geofence> = ArrayList()
     private var mGeofencePendingIntent: PendingIntent? = null
     private var mPendingGeofenceTask = PendingGeofenceTask.NONE
 
-    private enum class PendingGeofenceTask {
+    init {
+        populateGeofenceList(itemList)
+    }
+
+    enum class PendingGeofenceTask {
         ADD, REMOVE, NONE
     }
 
@@ -46,7 +49,7 @@ class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
         }
 
 
-    fun populateGeofenceList(items: List<Item>) {
+    private fun populateGeofenceList(items: List<Item>) {
         Log.d(TAG, "populateGeofenceList(): hit")
 
         for (item in items) {
@@ -63,11 +66,11 @@ class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
     }
 
 
-    fun performPendingGeofenceTask(perform: String) {
+    fun performPendingGeofenceTask(task: PendingGeofenceTask) {
         Log.d(TAG, "performPendingGeofenceTask(): hit")
-        when (perform) {
-            "ADD" -> addGeofences()
-            "REMOVE" -> removeGeofences()
+        when (task) {
+            PendingGeofenceTask.ADD -> addGeofences()
+            PendingGeofenceTask.REMOVE -> removeGeofences()
             else -> Log.e("Geofencing", "Could not Perform")
         }
     }
@@ -103,13 +106,14 @@ class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
         Log.d(TAG, "onComplete(): hit")
         // mPendingGeofenceTask = PendingGeofenceTask.NONE;
         if (task.isSuccessful) {
-            //   updateGeofencesAdded(!getGeofencesAdded());
+//               updateGeofencesAdded(!getGeofencesAdded());
             //   setButtonsEnabledState();
 
             //     int messageId = getGeofencesAdded() ? R.string.geofences_added :
             //            R.string.geofences_removed;
             //Toast.makeText(getActivity(), getString(messageId), Toast.LENGTH_SHORT).show();
-            Toast.makeText(mContext, mContext.getString(R.string.geofences_added), Toast.LENGTH_SHORT).show()
+//            Toast.makeText(mContext, mContext.getString(R.string.geofences_added), Toast.LENGTH_SHORT).show()
+            Toast.makeText(mContext, "Geofence Added or Removed", Toast.LENGTH_LONG).show()
         } else {
             // Get the status code for the error and log it using a user-friendly message.
             //  String errorMessage = GeofenceErrorMessages.getErrorString(this, task.getException());
@@ -122,6 +126,8 @@ class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
         return permissonState == PackageManager.PERMISSION_GRANTED
     }
+
+
 
     companion object {
 

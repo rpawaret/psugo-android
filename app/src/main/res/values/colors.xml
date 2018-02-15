@@ -10,4 +10,5 @@
 
     <color name="greyHeaderBackground">#f1eff0</color>
     <color name="greyHeaderText">#8a878a</color>
+    <color name="background_treehouse_gray">#e6e6e6</color>
 </resources>

@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
+import com.ipoondev.android.psugo.geofencing.Geofencing
 import com.ipoondev.android.psugo.model.Item
 import com.ipoondev.android.psugo.utilities.BROADCAST_GEOFENCE_TRANSITION_ENTER
 import com.ipoondev.android.psugo.utilities.BROADCAST_REGISTER_GEOFENCE_COMPLELE
@@ -33,22 +34,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMapFragment: MapFragment
     lateinit var mFirestore: FirebaseFirestore
     lateinit var playerId: String
+    lateinit var geofencing: Geofencing
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mFirestore = FirebaseFirestore.getInstance()
         playerId = FirebaseAuth.getInstance().currentUser!!.uid
 
-//        Log.d(TAG, "onCreate() : $missionId")
-
-//        val itemList = getAllItems(missionId)
-
-//        checkNotNull(getCurrentMissionId()).apply {
-//            getAllItems(this)
-//        }
-
-        // GET all items from Mission
-//        val missionRef = mFirestore.collection("missions").document(currentMissionId)
 
         LocalBroadcastManager.getInstance(activity!!).registerReceiver(registerGeofenceCompleteReceiver,
                 IntentFilter(BROADCAST_REGISTER_GEOFENCE_COMPLELE))
@@ -68,7 +60,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         override fun onReceive(context: Context?, intent: Intent?) {
 //            Toast.makeText(activity, "Receive geofence transition ENTER signal", Toast.LENGTH_LONG).show()
             Log.d(TAG, "Receive geofence transition ENTER signal")
-
+//            val builder = AlertDialog.Builder(activity!!)
+//            builder.setTitle("ENTERED").setMessage("Recieved geofence transition ENTER signal")
+//            val dialog = builder.create()
         }
 
     }
@@ -85,7 +79,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        Log.d(TAG, "onMapReady() : hit")
+//        Log.d(TAG, "onMapReady() : hit")
         mMap = googleMap
 
         if (ActivityCompat.checkSelfPermission(activity!!, android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -129,7 +123,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         for (itemDocument in task.result) {
-                            Log.d(TAG, "${itemDocument.id} => ${itemDocument.data}")
+//                            Log.d(TAG, "${itemDocument.id} => ${itemDocument.data}")
                             val item = itemDocument.toObject(Item::class.java)
                             itemList.add(item)
                             displayMarker(itemList)
@@ -149,9 +143,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             mMap.addMarker(MarkerOptions().
                     position(latLng)
                     .title(item.name))
-//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15F))
         }
-
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 LatLng(itemList[0].geoPoint!!.latitude,

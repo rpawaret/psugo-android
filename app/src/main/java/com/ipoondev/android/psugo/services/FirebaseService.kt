@@ -3,12 +3,17 @@ package com.ipoondev.android.psugo.services
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.ipoondev.android.psugo.model.MyMission
 import com.ipoondev.android.psugo.model.Player
 import java.util.*
 
 
 fun rootDocument(): DocumentReference? = rootPath()?.let {
     return fireStore().document(it)
+}
+
+fun myMissionsRef(): DocumentReference? = rootPath()?.let {
+    return fireStore().document(it).collection("myMissions").document()
 }
 
 fun rootPath(): String? {
@@ -31,17 +36,20 @@ fun afterSignIn() {
 
     val rootDocument = rootDocument()
             ?: throw IllegalStateException("root document not found")
+    val myMissionsRef = myMissionsRef() ?: throw  IllegalStateException("myMissionRef not found")
 
     rootDocument.get().addOnCompleteListener {
         val isNewUser = it.result.exists().not()
 
         if (isNewUser) {
             val batch = createWriteBatch()
-            val newPlayer = Player(loggedInUser()!!, 0, "", Date())
+            val newPlayer = Player(loggedInUser()!!, 0, null, Date())
+            val myMission = MyMission(null, 0, null)
 //            batch.set(rootDocument, HashMap<Any, Any>().apply {
 //                put("registered_at", System.currentTimeMillis())
 //            })
             batch.set(rootDocument, newPlayer)
+            batch.set(myMissionsRef,myMission)
 
             batch.commit().addOnCompleteListener {
                 println("this is a new user")
@@ -63,7 +71,7 @@ fun isNewPlayer() : Boolean{
 
 fun initNewPlayer() {
     val batch = createWriteBatch()
-    val newPlayer = Player(loggedInUser()!!, 0, "", Date())
+    val newPlayer = Player(loggedInUser()!!, 0, null, Date())
     val rootDocument = rootDocument()
             ?: throw IllegalStateException("root document not found")
 

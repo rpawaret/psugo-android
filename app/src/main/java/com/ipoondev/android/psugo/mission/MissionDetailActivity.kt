@@ -67,10 +67,14 @@ class MissionDetailActivity : AppCompatActivity() {
                 .collection("myMissions").document(missionId)
         myMissionRef.get()
                 .addOnCompleteListener {
-                    checkNotNull(it).apply {
-//                        Log.d(TAG, "DocumentSnapshot data: " + this.result.data)
-                        val myMission = this.result.toObject(MyMission::class.java)
-                        button_play.text = myMission.state
+                    if (it.result.exists()) {
+                        checkNotNull(it).apply {
+                            //                        Log.d(TAG, "DocumentSnapshot data: " + this.result.data)
+                            val myMission = this.result.toObject(MyMission::class.java)
+                            button_play.text = myMission.state
+                        }
+                    } else {
+
                     }
                 }.addOnFailureListener { e ->
                     Log.d(TAG, "Error getting Document: ${e.localizedMessage}")

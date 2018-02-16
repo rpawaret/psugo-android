@@ -39,6 +39,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mFirestore = FirebaseFirestore.getInstance()
+        // เมื่อ logout แล้วทำให้ playerID เป็น null -> app crash
         playerId = FirebaseAuth.getInstance().currentUser!!.uid
 
 
@@ -91,6 +92,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         uiSettings.isCompassEnabled = true
         uiSettings.isZoomControlsEnabled = true
 
+        if (playerId == null) {
+            return
+        }
         getItemList()
 
     }

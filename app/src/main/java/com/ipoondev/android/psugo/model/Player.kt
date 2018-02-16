@@ -15,7 +15,7 @@ class Player {
 
     constructor() {}
 
-    constructor(user: FirebaseUser, score: Int, currentMissionId: String, registered_at: Date) {
+    constructor(user: FirebaseUser, score: Int, currentMissionId: String?, registered_at: Date) {
         this.playerId = user.uid
         this.playerName = user.displayName
         this.playerEmail = user.email

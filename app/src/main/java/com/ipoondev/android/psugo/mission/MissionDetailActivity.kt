@@ -100,13 +100,13 @@ class MissionDetailActivity : AppCompatActivity() {
                 .get()
                 .addOnCompleteListener { task ->
                     val itemList = ArrayList<Item>()
-                        for (document in task.result) {
-                            val item = document.toObject(Item::class.java)
-                            itemList.add(item)
-                        }
+                    for (document in task.result) {
+                        val item = document.toObject(Item::class.java)
+                        itemList.add(item)
+                    }
                     val geofencing = Geofencing(this, itemList)
                     geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.ADD)
-                    }
+                }
 
 
         val batch = FirebaseFirestore.getInstance().batch()

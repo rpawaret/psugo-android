@@ -24,7 +24,7 @@ class MissionDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mission_details)
         setSupportActionBar(toolbar_mission_detail)
-        playerId = FirebaseAuth.getInstance().currentUser!!.uid
+        playerId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
         missionId = intent.extras.getString(EXTRA_MISSION_ID)
                 ?: throw IllegalArgumentException("Must pass extra $EXTRA_MISSION_ID")

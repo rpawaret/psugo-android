@@ -3,6 +3,7 @@ package com.ipoondev.android.psugo.profile
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +39,12 @@ class ProfileFragment : Fragment() {
             if (currentUser == null) {
                 signIn()
             } else {
-                signOut()
+//                signOut()
+                showSignOutDialog { signout ->
+                    if (signout) {
+                        signOut()
+                    }
+                }
             }
         }
 
@@ -96,8 +102,20 @@ class ProfileFragment : Fragment() {
                 }
     }
 
+    private fun showSignOutDialog(complete: (Boolean) -> Unit) {
+        val builder = AlertDialog.Builder(activity!!)
+                .setMessage("Confirm to Sign out?")
+                .setPositiveButton("Sign Out", { dialog, which ->
+                    complete(true)
+                })
+                .setNegativeButton("Cancel", { dialog, which -> dialog.cancel() })
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
     private fun startSettingActivity() {
-        val settingsIntent = Intent(activity, SettingsActivity::class.java)
+        val settingsIntent = Intent(activity , SettingsActivity::class.java)
         startActivity(settingsIntent)
     }
 

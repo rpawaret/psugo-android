@@ -1,5 +1,6 @@
 package com.ipoondev.android.psugo.mission
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -128,6 +129,7 @@ class MissionDetailActivity : AppCompatActivity() {
                     // set button.text = playing when user playing
                     isPlaying = true
                     button_play.text = "Playing"
+                    button_play.setBackgroundColor(Color.rgb(81, 180, 109))
                 }.addOnFailureListener {
                     Log.d(TAG, "ADD and UPDATE failed")
                 }

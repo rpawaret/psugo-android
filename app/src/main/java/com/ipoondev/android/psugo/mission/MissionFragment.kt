@@ -31,8 +31,6 @@ class MissionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         val query = FirebaseFirestore.getInstance()
                 .collection("missions")
 
@@ -69,7 +67,6 @@ class MissionFragment : Fragment() {
         } else {
             return
         }
-
     }
 
     private fun showRequestSignInDialog(complete: (Boolean) -> Unit) {

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.LocalBroadcastManager
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
+import com.ipoondev.android.psugo.auth.AuthUiActivity
 import com.ipoondev.android.psugo.geofencing.Geofencing
 import com.ipoondev.android.psugo.model.Item
 import com.ipoondev.android.psugo.utilities.BROADCAST_GEOFENCE_TRANSITION_ENTER
@@ -33,14 +35,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var mMapFragment: MapFragment
     lateinit var mFirestore: FirebaseFirestore
-    lateinit var playerId: String
+    var playerId: String? = null
     lateinit var geofencing: Geofencing
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mFirestore = FirebaseFirestore.getInstance()
         // เมื่อ logout แล้วทำให้ playerID เป็น null -> app crash
-        playerId = FirebaseAuth.getInstance().currentUser!!.uid
+        playerId = FirebaseAuth.getInstance().currentUser?.uid
 
 
         LocalBroadcastManager.getInstance(activity!!).registerReceiver(registerGeofenceCompleteReceiver,
@@ -61,9 +63,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         override fun onReceive(context: Context?, intent: Intent?) {
 //            Toast.makeText(activity, "Receive geofence transition ENTER signal", Toast.LENGTH_LONG).show()
             Log.d(TAG, "Receive geofence transition ENTER signal")
-//            val builder = AlertDialog.Builder(activity!!)
-//            builder.setTitle("ENTERED").setMessage("Recieved geofence transition ENTER signal")
-//            val dialog = builder.create()
+
         }
 
     }
@@ -75,8 +75,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         mMapFragment = activity!!.fragmentManager.findFragmentById(R.id.map) as MapFragment
         mMapFragment.getMapAsync(this)
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -92,11 +94,59 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         uiSettings.isCompassEnabled = true
         uiSettings.isZoomControlsEnabled = true
 
-        if (playerId == null) {
-            return
+//        checkExistingUser { isNull ->
+//            if (isNull.not()) {
+//                getItemList()
+//            }
+//        }
+        if (hasPlayerId()) {
+            getItemList()
+        } else {
+            showRequestSignInDialog {ok ->
+                if (ok) {
+                    startAuthUiActivity()
+                }
+            }
         }
-        getItemList()
 
+    }
+
+    private fun hasPlayerId() : Boolean {
+        return playerId != null
+    }
+
+    private fun checkExistingUser(isNull: (Boolean) -> Unit) {
+        Log.d(TAG, "checkExistingUser() : hit")
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            Log.d(TAG, "checkExistingUser() : if user is null")
+            showRequestSignInDialog { ok ->
+                if (ok) {
+                    startAuthUiActivity()
+                }
+                isNull(true)
+            }
+        } else {
+            Log.d(TAG, "checkExistingUser() : If user is not null")
+            isNull(false)
+            playerId = user.uid
+        }
+    }
+
+    private fun showRequestSignInDialog(complete: (Boolean) -> Unit) {
+        val builder = AlertDialog.Builder(activity as Context)
+                .setMessage("Please Sign in First")
+                .setPositiveButton("OK", { dialog, which ->
+                    dialog.dismiss()
+                    complete(true)
+                })
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun startAuthUiActivity() {
+        val authUiActivityIntent = Intent(activity, AuthUiActivity::class.java)
+        startActivity(authUiActivityIntent)
     }
 
     // GET currentMissionId
@@ -104,7 +154,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         var itemList = ArrayList<Item>()
         var currentMissionId: String? = null
 
-        val playerRef = mFirestore.collection("players").document(playerId)
+        val playerRef = mFirestore.collection("players").document(playerId!!)
         playerRef.get().addOnCompleteListener { task ->
            if (task.isSuccessful) {
                  currentMissionId = task.result.data["currentMissionId"].toString()
@@ -157,6 +207,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        activity!!.fragmentManager.beginTransaction().remove(mMapFragment).commit()
+            activity!!.fragmentManager.beginTransaction().remove(mMapFragment).commit()
     }
 }

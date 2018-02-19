@@ -3,6 +3,7 @@ package com.ipoondev.android.psugo.profile
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.auth.AuthUiActivity
+import com.ipoondev.android.psugo.quiz.QuizActivity
 import com.ipoondev.android.psugo.services.DataService
 import com.ipoondev.android.psugo.settings.SettingsActivity
 import com.squareup.picasso.Picasso
@@ -38,7 +40,12 @@ class ProfileFragment : Fragment() {
             if (currentUser == null) {
                 signIn()
             } else {
-                signOut()
+//                signOut()
+                showSignOutDialog { signout ->
+                    if (signout) {
+                        signOut()
+                    }
+                }
             }
         }
 
@@ -58,9 +65,19 @@ class ProfileFragment : Fragment() {
             addItems()
         }
 
+        button_profile_play_quiz.setOnClickListener {
+            startQuizActivity()
+        }
+
 
         populateProfile()
         updateLoginButton()
+    }
+
+    private fun startQuizActivity() {
+        val quizIntent = Intent(activity, QuizActivity::class.java)
+        startActivity(quizIntent)
+
     }
 
     private fun populateProfile() {
@@ -96,8 +113,20 @@ class ProfileFragment : Fragment() {
                 }
     }
 
+    private fun showSignOutDialog(complete: (Boolean) -> Unit) {
+        val builder = AlertDialog.Builder(activity!!)
+                .setMessage("Confirm to Sign out?")
+                .setPositiveButton("Sign Out", { dialog, which ->
+                    complete(true)
+                })
+                .setNegativeButton("Cancel", { dialog, which -> dialog.cancel() })
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
     private fun startSettingActivity() {
-        val settingsIntent = Intent(activity, SettingsActivity::class.java)
+        val settingsIntent = Intent(activity , SettingsActivity::class.java)
         startActivity(settingsIntent)
     }
 

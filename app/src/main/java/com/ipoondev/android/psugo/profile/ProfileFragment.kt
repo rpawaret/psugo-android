@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.auth.AuthUiActivity
+import com.ipoondev.android.psugo.quiz.QuizActivity
 import com.ipoondev.android.psugo.services.DataService
 import com.ipoondev.android.psugo.settings.SettingsActivity
 import com.squareup.picasso.Picasso
@@ -64,9 +65,19 @@ class ProfileFragment : Fragment() {
             addItems()
         }
 
+        button_profile_play_quiz.setOnClickListener {
+            startQuizActivity()
+        }
+
 
         populateProfile()
         updateLoginButton()
+    }
+
+    private fun startQuizActivity() {
+        val quizIntent = Intent(activity, QuizActivity::class.java)
+        startActivity(quizIntent)
+
     }
 
     private fun populateProfile() {

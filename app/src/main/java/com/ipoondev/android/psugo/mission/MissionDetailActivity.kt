@@ -21,10 +21,19 @@ class MissionDetailActivity : AppCompatActivity() {
     lateinit var missionId: String
     lateinit var playerId: String
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putBoolean(BUTTON_STATE_KEY, isPlaying)
+        super.onSaveInstanceState(outState)
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mission_details)
         setSupportActionBar(toolbar_mission_detail)
+
+        if (savedInstanceState != null) {
+            isPlaying = savedInstanceState.getBoolean(BUTTON_STATE_KEY)
+        }
         playerId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
         missionId = intent.extras.getString(EXTRA_MISSION_ID)
@@ -40,7 +49,6 @@ class MissionDetailActivity : AppCompatActivity() {
                     text_mission_detail_detail.text = mission.detail
                     text_mission_detail_subject.text = "Subject: ${mission.subject}"
                     text_mission_detail_owner.text = "Teacher: ${mission.ownerName}"
-
                 }.addOnFailureListener { exception ->
                     Log.e(TAG, exception.localizedMessage)
                 }
@@ -51,7 +59,7 @@ class MissionDetailActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 val area = StringBuilder()
                 for (document in task.result) {
-//                    Log.d(TAG, "${document.id} ${document.data}")
+                    Log.d(TAG, "${document.id} ${document.data}")
                     val item = document.toObject(Item::class.java)
                     items.add(item)
                     area.append(" ${document.data["name"]}")
@@ -73,6 +81,7 @@ class MissionDetailActivity : AppCompatActivity() {
                             //                        Log.d(TAG, "DocumentSnapshot data: " + this.result.data)
                             val myMission = this.result.toObject(MyMission::class.java)
                             button_play.text = myMission.state
+
                         }
                     } else {
 
@@ -168,6 +177,7 @@ class MissionDetailActivity : AppCompatActivity() {
                     Log.d(TAG, "UPDATE myMission state to Pause and UPDATE currentMissionId to null successful")
                     isPlaying = false
                     button_play.text = "Paused"
+                    button_play.setBackgroundColor(Color.rgb(224, 171, 24))
 
                 }.addOnFailureListener {
                     Log.d(TAG, "UPDATE failed")
@@ -178,5 +188,6 @@ class MissionDetailActivity : AppCompatActivity() {
 
     companion object {
         val EXTRA_MISSION_ID = "key_mission_id"
+        val BUTTON_STATE_KEY = "button_state_key"
     }
 }

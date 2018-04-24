@@ -16,15 +16,16 @@ import com.google.android.gms.tasks.Task
 import com.ipoondev.android.psugo.model.Item
 
 
-class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCompleteListener<Void> {
+//class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCompleteListener<Void> {
+class Geofencing(private val mContext: Context) : OnCompleteListener<Void> {
     private val mGeofencingClient: GeofencingClient = LocationServices.getGeofencingClient(mContext)
     private val mGeofenceList: ArrayList<Geofence> = ArrayList()
     private var mGeofencePendingIntent: PendingIntent? = null
     private var mPendingGeofenceTask = PendingGeofenceTask.NONE
 
-    init {
-        populateGeofenceList(itemList)
-    }
+//    init {
+//        populateGeofenceList(itemList)
+//    }
 
     enum class PendingGeofenceTask {
         ADD, REMOVE, NONE
@@ -48,11 +49,9 @@ class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCo
             return mGeofencePendingIntent
         }
 
-
-    private fun populateGeofenceList(items: List<Item>) {
+    fun populateGeofenceList(item: Item) {
         Log.d(TAG, "populateGeofenceList(): hit")
 
-        for (item in items) {
             val timeout = item.timeout!!.toLong()
             val latitude = item.latitude!!.toDouble()
             val longitude = item.longitude!!.toDouble()
@@ -65,10 +64,30 @@ class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCo
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build()
             mGeofenceList.add(geofence)
-        }
 
-        Log.d(TAG, mGeofenceList.toString())
+        Log.d(TAG, "line 68: GeofenList: ${mGeofenceList.toString()}")
     }
+
+//    private fun populateGeofenceList(items: List<Item>) {
+//        Log.d(TAG, "populateGeofenceList(): hit")
+//
+//        for (item in items) {
+//            val timeout = item.timeout!!.toLong()
+//            val latitude = item.latitude!!.toDouble()
+//            val longitude = item.longitude!!.toDouble()
+//            val radius = item.radius!!.toFloat()
+//
+//            val geofence = Geofence.Builder()
+//                    .setRequestId(item.name)
+//                    .setExpirationDuration((timeout.times(60).times(60).times(1000)))
+//                    .setCircularRegion(latitude, longitude, radius)
+//                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+//                    .build()
+//            mGeofenceList.add(geofence)
+//        }
+//
+//        Log.d(TAG, mGeofenceList.toString())
+//    }
 
 
     fun performPendingGeofenceTask(task: PendingGeofenceTask) {
@@ -131,7 +150,6 @@ class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCo
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
         return permissonState == PackageManager.PERMISSION_GRANTED
     }
-
 
 
     companion object {

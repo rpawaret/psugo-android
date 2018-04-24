@@ -126,7 +126,6 @@ class MissionDetailActivity : AppCompatActivity() {
     private fun registerItemsToGeofencing() {
         var mission: Mission? = null
 
-
         FirebaseFirestore.getInstance().collection("missions").document(missionId)
                 .get()
                 .addOnSuccessListener{ documentSnapshot ->
@@ -134,7 +133,7 @@ class MissionDetailActivity : AppCompatActivity() {
                         mission = documentSnapshot.toObject(Mission::class.java)
                         Log.d(TAG, "Current data: " + documentSnapshot.data)
 
-//                        val itemList = ArrayList<Item>()
+                        val geofencing = Geofencing(this)
                         mission!!.selectedItems?.forEach { itemId ->
                             FirebaseFirestore.getInstance().collection("items").document(itemId)
                                     .get()
@@ -142,26 +141,15 @@ class MissionDetailActivity : AppCompatActivity() {
                                         val item = it.toObject(Item::class.java)!!
                                         Log.d(TAG, "ITEM:${item.name}")
 
-                                        
-//                                        itemList.add(item)
+                                        geofencing.populateGeofenceList(item)
                                     }
                         }
 
-//                        Log.d(TAG,itemList.isEmpty().toString())
+//                        geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.ADD)
 
                     }
                 }
 
-//        itemList = ArrayList()
-//        mission!!.selectedItems?.forEach { itemId ->
-//            FirebaseFirestore.getInstance().collection("items").document(itemId)
-//                    .get()
-//                    .addOnSuccessListener {
-//                        val item = it.toObject(Item::class.java)!!
-//                        itemList.add(item)
-//                    }
-//
-//        }
 //
 //        val geofencing = Geofencing(this, itemList)
 //        geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.ADD)
@@ -200,8 +188,8 @@ class MissionDetailActivity : AppCompatActivity() {
                     }
         }
 
-        val geofencing = Geofencing(this, itemList)
-        geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.REMOVE)
+//        val geofencing = Geofencing(this, itemList)
+//        geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.REMOVE)
     }
 
     fun playMission() {

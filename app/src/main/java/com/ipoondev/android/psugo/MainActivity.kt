@@ -76,7 +76,7 @@ private val TAG = MainActivity::class.simpleName
         val builder = AlertDialog.Builder(this)
                 .setMessage("Do you want to take the quiz?")
                 .setPositiveButton("Quiz", { dialog, which ->
-//                    startQuizActivity()
+                    startQuizActivity()
                 })
                 .setNegativeButton("NO", { dialog, which -> dialog.cancel() })
 

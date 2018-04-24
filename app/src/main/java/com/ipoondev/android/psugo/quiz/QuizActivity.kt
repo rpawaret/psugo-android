@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_quiz.*
 class QuizActivity : AppCompatActivity() {
 
     private lateinit var mFirestore: FirebaseFirestore
-    private lateinit var quizList : ArrayList<Quiz>
+    private lateinit var quizList: ArrayList<Quiz>
     private lateinit var quiz: Quiz
     private var score: Int = 0
 
@@ -21,11 +21,10 @@ class QuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
 
-        mFirestore = FirebaseFirestore.getInstance()
         quizList = ArrayList()
 
-        val quizzedRef = mFirestore.collection("quizzes")
-        quizzedRef.get()
+        FirebaseFirestore.getInstance().collection("quizzes")
+                .get()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         for (document in it.result) {
@@ -33,7 +32,6 @@ class QuizActivity : AppCompatActivity() {
                             quizList.add(quiz)
 
                             Log.d(TAG, "${document.id} => ${document.data}")
-                            Log.d(TAG, quiz.options.toString())
 
                             setQuestionView(quiz)
 
@@ -45,16 +43,15 @@ class QuizActivity : AppCompatActivity() {
             checkAnswer()
         }
 
-
     }
 
 
     private fun setQuestionView(quiz: Quiz) {
         text_quiz_question.text = quiz.question
-        radio_quiz_ch1.text = quiz.options?.get(0)
-        radio_quiz_ch2.text = quiz.options?.get(1)
-        radio_quiz_ch3.text = quiz.options?.get(2)
-        radio_quiz_ch4.text = quiz.options?.get(3)
+        radio_quiz_ch1.text = quiz.opt_1
+        radio_quiz_ch2.text = quiz.opt_2
+        radio_quiz_ch3.text = quiz.opt_3
+        radio_quiz_ch4.text = quiz.opt_4
     }
 
 

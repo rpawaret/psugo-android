@@ -31,9 +31,9 @@ class MissionDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mission_details)
         setSupportActionBar(toolbar_mission_detail)
 
-//        if (savedInstanceState != null) {
-//            isPlaying = savedInstanceState.getBoolean(BUTTON_STATE_KEY)
-//        }
+        if (savedInstanceState != null) {
+            isPlaying = savedInstanceState.getBoolean(BUTTON_STATE_KEY)
+        }
 
         playerId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         missionId = intent.extras.getString(EXTRA_MISSION_ID)
@@ -44,18 +44,18 @@ class MissionDetailActivity : AppCompatActivity() {
         initialButtonState()
 
 
-//        button_play.setOnClickListener {
-//            if (!isPlaying) {
-//                playMission()
-//            } else {
-//                stopMission()
-//            }
-//        }
-
         button_play.setOnClickListener {
-            playMission()
-//            stoMission()
+            if (!isPlaying) {
+                playMission()
+            } else {
+                stopMission()
+            }
         }
+
+//        button_play.setOnClickListener {
+//            playMission()
+////            stoMission()
+//        }
     }
 
     private fun fetchMissionById(missionId: String) {
@@ -65,6 +65,7 @@ class MissionDetailActivity : AppCompatActivity() {
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         mission = documentSnapshot.toObject(Mission::class.java)
                         initialMissionDetailView(mission!!)
+                        initialMissionItemsView(mission!!)
                         Log.d(TAG, "Current data: " + documentSnapshot.data);
                     }
                 }
@@ -75,7 +76,19 @@ class MissionDetailActivity : AppCompatActivity() {
         text_mission_detail_detail.text = mission.statement
         text_mission_detail_subject.text = "Categories: ${mission.categories}"
         text_mission_detail_owner.text = "Teacher: Admin"
-        text_mission_detail_items.text = mission.selectedItems.toString()
+//        text_mission_detail_items.text = mission.selectedItems.toString()
+    }
+
+    private fun initialMissionItemsView(mission: Mission) {
+        mission.selectedItems!!.forEach { itemId ->
+            FirebaseFirestore.getInstance().collection("items").document(itemId)
+                    .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            val item = documentSnapshot.toObject(Item::class.java)
+                            text_mission_detail_items.append("[${item!!.name}] ")
+                        }
+                    }
+        }
     }
 
     private fun initialButtonState() {
@@ -85,43 +98,14 @@ class MissionDetailActivity : AppCompatActivity() {
                 .addOnSuccessListener { documentSnapshot ->
                     val myMission = documentSnapshot.toObject(MyMission::class.java)
                     if (myMission?.state.equals("Playing")) {
-                        button_play.text = myMission?.state ?: "Play"
-                        button_play.setBackgroundColor(Color.rgb(81, 180, 109))
+                        button_play.text = "Stop"
+                        button_play.setBackgroundColor(Color.rgb(255, 68, 68))
+
                     } else {
-                        button_play.text = myMission?.state ?: "Play"
+                        button_play.text = "Play"
+                        button_play.setBackgroundColor(Color.rgb(81, 180, 109))
                     }
                 }
-    }
-
-    private fun getItemNameList(itemList: ArrayList<Item>): String {
-        var itemName = ""
-        for (item in itemList) {
-            itemName += item.name
-        }
-        return itemName
-    }
-
-    private fun fetchSelectedItems() {
-        itemList = ArrayList()
-        mMission!!.selectedItems?.forEach { itemId ->
-            FirebaseFirestore.getInstance().collection("items").document(itemId)
-                    .get()
-                    .addOnSuccessListener {
-                        val item = it.toObject(Item::class.java)!!
-                        itemList.add(item)
-                    }
-                    .addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val doc = it.result
-                            if (doc.exists()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + doc.data);
-                            } else {
-                                Log.d(TAG, "No such document");
-                            }
-                        }
-                    }
-        }
-
     }
 
     private fun registerItemsToGeofencing() {
@@ -204,8 +188,8 @@ class MissionDetailActivity : AppCompatActivity() {
                         Log.d(TAG, "ADD myMission Document and UPDATE currentMissionId successful")
                         // set button.text = playing when user playing
                         isPlaying = true
-                        button_play.text = "Playing"
-                        button_play.setBackgroundColor(Color.rgb(81, 180, 109))
+                        button_play.text = "Stop"
+                        button_play.setBackgroundColor(Color.rgb(255, 68, 68))
                     }.addOnFailureListener {
                         Log.d(TAG, "ADD and UPDATE failed")
                     }
@@ -220,7 +204,6 @@ class MissionDetailActivity : AppCompatActivity() {
                     .collection("players").document(playerId)
                     .collection("myMissions").document(missionId)
             batch.delete(myMissionsRef)
-//            batch.update(myMissionsRef, "state", "Paused")
 
             // update the currentMissionId field in playerId document to null
             val playerIdRef = FirebaseFirestore.getInstance()
@@ -232,7 +215,7 @@ class MissionDetailActivity : AppCompatActivity() {
                         Log.d(TAG, "Delete myMission document and UPDATE currentMissionId to null successful")
                         isPlaying = false
                         button_play.text = "Play"
-//                        button_play.setBackgroundColor(Color.rgb(224, 171, 24))
+                        button_play.setBackgroundColor(Color.rgb(81, 180, 109))
 
                     }.addOnFailureListener {
                         Log.d(TAG, "UPDATE failed")

@@ -62,13 +62,17 @@ class ProfileFragment : Fragment() {
         }
 
         button_profile_add_items.setOnClickListener {
-            addItems()
+//            addItems()
         }
 
         button_profile_play_quiz.setOnClickListener {
             startQuizActivity()
         }
 
+        button_profile_add_items.visibility = View.INVISIBLE
+        button_profile_add_missions.visibility = View.INVISIBLE
+        button_profile_add_players.visibility = View.INVISIBLE
+        button_profile_play_quiz.visibility = View.INVISIBLE
 
         populateProfile()
         updateLoginButton()
@@ -155,33 +159,33 @@ class ProfileFragment : Fragment() {
     fun addMissions(){
         val docRef = FirebaseFirestore.getInstance().collection("missions")
 
-        for (mission in DataService.missions) {
-            docRef.document().set(mission)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Missions has been saved")
-                    }.addOnFailureListener {
-                        Log.d(TAG, "Missions was not saved!: ${it.localizedMessage}")
-                    }
-        }
+//        for (mission in DataService.missions) {
+//            docRef.document().set(mission)
+//                    .addOnSuccessListener {
+//                        Log.d(TAG, "Missions has been saved")
+//                    }.addOnFailureListener {
+//                        Log.d(TAG, "Missions was not saved!: ${it.localizedMessage}")
+//                    }
+//        }
 
     }
 
-    fun addItems() {
-
-        val docRef = FirebaseFirestore.getInstance().collection("items")
-
-        for (item in DataService.items1) {
-            docRef.document().set(item)
-                    .addOnSuccessListener {
-                        Log.d(TAG, "Items has been saved")
-                    }
-                    .addOnFailureListener {
-                        Log.d(TAG, "Items was not saved!: ${it.localizedMessage}")
-                    }
-
-        }
-
-    }
+//    fun addItems() {
+//
+//        val docRef = FirebaseFirestore.getInstance().collection("items")
+//
+//        for (item in DataService.items1) {
+//            docRef.document().set(item)
+//                    .addOnSuccessListener {
+//                        Log.d(TAG, "Items has been saved")
+//                    }
+//                    .addOnFailureListener {
+//                        Log.d(TAG, "Items was not saved!: ${it.localizedMessage}")
+//                    }
+//
+//        }
+//
+//    }
 
 
 

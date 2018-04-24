@@ -20,7 +20,6 @@ import com.ipoondev.android.psugo.model.Mission
 import kotlinx.android.synthetic.main.fragment_missions.*
 
 class MissionFragment : Fragment() {
-
     lateinit var adapter: MissionRecyclerAdapter
     lateinit var mFilterDialog: FilterDialogFragment
 
@@ -103,6 +102,5 @@ class MissionFragment : Fragment() {
     companion object {
         val TAG = MissionFragment::class.simpleName
     }
-
 }
 

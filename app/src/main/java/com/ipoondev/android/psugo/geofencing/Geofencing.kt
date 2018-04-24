@@ -53,10 +53,15 @@ class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCo
         Log.d(TAG, "populateGeofenceList(): hit")
 
         for (item in items) {
+            val timeout = item.timeout!!.toLong()
+            val latitude = item.latitude!!.toDouble()
+            val longitude = item.longitude!!.toDouble()
+            val radius = item.radius!!.toFloat()
+
             val geofence = Geofence.Builder()
                     .setRequestId(item.name)
-                    .setExpirationDuration((item.timeout!!.times(60).times(60).times(1000)))
-                    .setCircularRegion(item.geoPoint!!.latitude, item.geoPoint!!.longitude, item.radius!!)
+                    .setExpirationDuration((timeout.times(60).times(60).times(1000)))
+                    .setCircularRegion(latitude, longitude, radius)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build()
             mGeofenceList.add(geofence)

@@ -8,7 +8,6 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import com.ipoondev.android.psugo.geofencing.GeofenceTransitionsIntentService
-import com.ipoondev.android.psugo.model.Item
 
 object GeofencingService {
 
@@ -16,23 +15,23 @@ object GeofencingService {
     lateinit var geofenceList: MutableList<Geofence>
     var isRegisterComplete = false
     var isUnregisterComplete = false
-
-    fun createGeofenceList(items: List<Item>) {
-
-        geofenceList = arrayListOf()
-
-        for (item in items) {
-            val geofence = Geofence.Builder()
-                    .setRequestId(item.name)
-                    .setExpirationDuration((item.timeout!! * 60 * 60 * 1000))
-                    .setCircularRegion(item.geoPoint!!.latitude, item.geoPoint!!.longitude, item.radius!!)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
-                    .build()
-                geofenceList.add(geofence)
-        }
-
-        Log.d("GeofencingService", geofenceList.toString())
-    }
+//
+//    fun createGeofenceList(items: List<Item>) {
+//
+//        geofenceList = arrayListOf()
+//
+//        for (item in items) {
+//            val geofence = Geofence.Builder()
+//                    .setRequestId(item.name)
+//                    .setExpirationDuration((item.timeout!! * 60 * 60 * 1000))
+//                    .setCircularRegion(item.geoPoint!!.latitude, item.geoPoint!!.longitude, item.radius!!)
+//                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+//                    .build()
+//                geofenceList.add(geofence)
+//        }
+//
+//        Log.d("GeofencingService", geofenceList.toString())
+//    }
 
     fun registerAllGeofences(context: Context) {
         if (!GoogleApiService.client.isConnected) {

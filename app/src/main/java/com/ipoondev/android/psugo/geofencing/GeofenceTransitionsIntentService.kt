@@ -21,10 +21,6 @@ import java.util.*
 
 class GeofenceTransitionsIntentService : IntentService(TAG) {
 
-    private fun sendSignalToMapsFragment() {
-
-    }
-
     override fun onHandleIntent(intent: Intent?) {
         Log.d(TAG, "onHandleIntent(): hit")
         val geofencingEvent = GeofencingEvent.fromIntent(intent)

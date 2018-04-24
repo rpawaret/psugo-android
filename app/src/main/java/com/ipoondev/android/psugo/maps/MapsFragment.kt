@@ -11,12 +11,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
@@ -174,7 +171,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val playerRef = mFirestore.collection("players").document(playerId!!)
         playerRef.get().addOnCompleteListener { task ->
            if (task.isSuccessful) {
-                 currentMissionId = task.result.data["currentMissionId"].toString()
+                 currentMissionId = task.result.data!!["currentMissionId"].toString()
                 Log.d(TAG, "$currentMissionId")
                 itemList = getAllItems(currentMissionId!!)
            }
@@ -209,16 +206,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun displayMarker(itemList: ArrayList<Item>) {
 
-        itemList.forEach { item ->
-            val latLng = LatLng(item.geoPoint!!.latitude, item.geoPoint!!.longitude)
-            mMap.addMarker(MarkerOptions().
-                    position(latLng)
-                    .title(item.name))
-        }
+//        itemList.forEach { item ->
+//            val latLng = LatLng(item.geoPoint!!.latitude, item.geoPoint!!.longitude)
+//            mMap.addMarker(MarkerOptions().
+//                    position(latLng)
+//                    .title(item.name))
+//        }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                LatLng(itemList[0].geoPoint!!.latitude,
-                        itemList[0].geoPoint!!.longitude), 15F))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+//                LatLng(itemList[0].geoPoint!!.latitude,
+//                        itemList[0].geoPoint!!.longitude), 15F))
 
     }
 

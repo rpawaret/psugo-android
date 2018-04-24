@@ -54,6 +54,7 @@ class MissionDetailActivity : AppCompatActivity() {
 
         button_play.setOnClickListener {
             playMission()
+//            stoMission()
         }
     }
 
@@ -133,88 +134,53 @@ class MissionDetailActivity : AppCompatActivity() {
                         mission = documentSnapshot.toObject(Mission::class.java)
                         Log.d(TAG, "Current data: " + documentSnapshot.data)
 
-                        val geofencing = Geofencing(this)
                         mission!!.selectedItems?.forEach { itemId ->
                             FirebaseFirestore.getInstance().collection("items").document(itemId)
                                     .get()
                                     .addOnSuccessListener {
                                         val item = it.toObject(Item::class.java)!!
                                         Log.d(TAG, "ITEM:${item.name}")
-
-                                        geofencing.populateGeofenceList(item)
+                                        val geofencing = Geofencing(this, item)
+                                        geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.ADD)
                                     }
                         }
-
-//                        geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.ADD)
-
                     }
                 }
-
-//
-//        val geofencing = Geofencing(this, itemList)
-//        geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.ADD)
     }
 
     private fun unRegisterItemsToGeofencing() {
 
         var mission: Mission? = null
+
         FirebaseFirestore.getInstance().collection("missions").document(missionId)
                 .get()
                 .addOnSuccessListener{ documentSnapshot ->
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         mission = documentSnapshot.toObject(Mission::class.java)
-                        initialMissionDetailView(mission!!)
-                        Log.d(TAG, "Current data: " + documentSnapshot.data);
-                    }
-                }
+                        Log.d(TAG, "Current data: " + documentSnapshot.data)
 
-        itemList = ArrayList()
-        mission!!.selectedItems?.forEach { itemId ->
-            FirebaseFirestore.getInstance().collection("items").document(itemId)
-                    .get()
-                    .addOnSuccessListener {
-                        val item = it.toObject(Item::class.java)!!
-                        itemList.add(item)
-                    }
-                    .addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            val doc = it.result
-                            if (doc.exists()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + doc.data);
-                            } else {
-                                Log.d(TAG, "No such document");
-                            }
+                        mission!!.selectedItems?.forEach { itemId ->
+                            FirebaseFirestore.getInstance().collection("items").document(itemId)
+                                    .get()
+                                    .addOnSuccessListener {
+                                        val item = it.toObject(Item::class.java)!!
+                                        Log.d(TAG, "ITEM:${item.name}")
+                                        val geofencing = Geofencing(this, item)
+                                        geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.REMOVE)
+                                    }
                         }
                     }
-        }
-
-//        val geofencing = Geofencing(this, itemList)
-//        geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.REMOVE)
+                }
     }
 
     fun playMission() {
-//        FirebaseFirestore.getInstance().collection("missions").document(missionId)
-//                .collection("items")
-//                .get()
-//                .addOnCompleteListener { task ->
-//                    val itemList = ArrayList<Item>()
-//                    for (document in task.result) {
-//                        val item = document.toObject(Item::class.java)
-//                        itemList.add(item)
-//                    }
-//                    val geofencing = Geofencing(this, itemList)
-//                    geofencing.performPendingGeofenceTask(Geofencing.PendingGeofenceTask.ADD)
-//                }
-//        fetchSelectedItems()
         updatePlayerData("playMission")
         registerItemsToGeofencing()
-
     }
 
     fun stopMission() {
         updatePlayerData("stopMission")
-//        unRegisterItemsToGeofencing()
-
+        unRegisterItemsToGeofencing()
     }
 
     private fun updatePlayerData(action: String) {

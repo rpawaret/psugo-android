@@ -16,22 +16,5 @@ class Mission {
         this.selectedItems = selectedItems
     }
 
-
-//    constructor(user: FirebaseUser, name: String, detail: String, subject: String, state: String, photo: String, numPlayer: Int, timestamp: Date?) {
-//        this.ownerId = user.uid
-//        this.ownerName = user.displayName
-//        if (TextUtils.isEmpty(this.ownerName)) {
-//            this.ownerName = user.email
-//        }
-//        this.name = name
-//        this.statement = detail
-//        this.categories = subject
-//        this.state = state
-//        this.photo = photo
-//        this.numPlayer = numPlayer
-//        this.timestamp = timestamp
-//    }
-
-
 }
 

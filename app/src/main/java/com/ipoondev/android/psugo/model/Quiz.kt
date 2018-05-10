@@ -3,16 +3,22 @@ package com.ipoondev.android.psugo.model
 class Quiz {
 
     var question : String? = null
-    var options : List<String>? = emptyList<String>()
+    var opt_1: String? = null
+    var opt_2: String? = null
+    var opt_3: String? = null
+    var opt_4: String? = null
     var answer : String? = null
-    var point : Int = 0
 
     constructor() {}
 
-    constructor(question: String?, options: List<String>?, answer: String?, point: Int) {
+    constructor(question: String?, opt_1: String?, opt_2: String?, opt_3: String?, opt_4: String?, answer: String?) {
         this.question = question
-        this.options = options
+        this.opt_1 = opt_1
+        this.opt_2 = opt_2
+        this.opt_3 = opt_3
+        this.opt_4 = opt_4
         this.answer = answer
-        this.point = point
     }
+
+
 }

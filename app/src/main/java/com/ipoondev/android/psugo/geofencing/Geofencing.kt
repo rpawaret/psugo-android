@@ -16,27 +16,25 @@ import com.google.android.gms.tasks.Task
 import com.ipoondev.android.psugo.model.Item
 
 
-class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCompleteListener<Void> {
+class Geofencing(private val mContext: Context, private val item: Item) : OnCompleteListener<Void> {
     private val mGeofencingClient: GeofencingClient = LocationServices.getGeofencingClient(mContext)
-    private val mGeofenceList: ArrayList<Geofence> = ArrayList()
     private var mGeofencePendingIntent: PendingIntent? = null
     private var mPendingGeofenceTask = PendingGeofenceTask.NONE
-
-    init {
-        populateGeofenceList(itemList)
-    }
-
+    private var mGeofence: Geofence? = null
     enum class PendingGeofenceTask {
         ADD, REMOVE, NONE
     }
 
-    private val geofencingRequest: GeofencingRequest
-        get() {
-            val builder = GeofencingRequest.Builder()
-            builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-            builder.addGeofences(mGeofenceList)
-            return builder.build()
-        }
+    init {
+        createGeofence(item)
+    }
+
+    private fun getGeofencingRequest(): GeofencingRequest {
+        return GeofencingRequest.Builder().apply {
+            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+            addGeofence(mGeofence)
+        }.build()
+    }
 
     private val geofencePendingIntent: PendingIntent?
         get() {
@@ -48,23 +46,21 @@ class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCo
             return mGeofencePendingIntent
         }
 
+    fun createGeofence(item: Item) {
+        Log.d(TAG, "createGeofence(): hit")
 
-    private fun populateGeofenceList(items: List<Item>) {
-        Log.d(TAG, "populateGeofenceList(): hit")
+        val timeout = item.timeout!!.toLong()
+        val latitude = item.latitude!!.toDouble()
+        val longitude = item.longitude!!.toDouble()
+        val radius = item.radius!!.toFloat()
 
-        for (item in items) {
-            val geofence = Geofence.Builder()
-                    .setRequestId(item.name)
-                    .setExpirationDuration((item.timeout!!.times(60).times(60).times(1000)))
-                    .setCircularRegion(item.geoPoint!!.latitude, item.geoPoint!!.longitude, item.radius!!)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
-                    .build()
-            mGeofenceList.add(geofence)
-        }
-
-        Log.d(TAG, mGeofenceList.toString())
+        mGeofence = Geofence.Builder()
+                .setRequestId(item.name)
+                .setExpirationDuration(timeout.times(60).times(60).times(1000))
+                .setCircularRegion(latitude, longitude, radius)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build()
     }
-
 
     fun performPendingGeofenceTask(task: PendingGeofenceTask) {
         Log.d(TAG, "performPendingGeofenceTask(): hit")
@@ -79,7 +75,7 @@ class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCo
         Log.d(TAG, "addGeofences(): hit")
         if (checkPermissions()) {
             try {
-                mGeofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
+                mGeofencingClient.addGeofences(getGeofencingRequest(), geofencePendingIntent)
                         .addOnCompleteListener(this)
             } catch (se: SecurityException) {
                 Log.e(TAG, se.localizedMessage)
@@ -128,9 +124,7 @@ class Geofencing(private val mContext: Context, val itemList: List<Item>) : OnCo
     }
 
 
-
     companion object {
-
         private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
         private val TAG = Geofencing::class.simpleName
     }

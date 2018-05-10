@@ -21,10 +21,6 @@ import java.util.*
 
 class GeofenceTransitionsIntentService : IntentService(TAG) {
 
-    private fun sendSignalToMapsFragment() {
-
-    }
-
     override fun onHandleIntent(intent: Intent?) {
         Log.d(TAG, "onHandleIntent(): hit")
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
@@ -41,8 +37,8 @@ class GeofenceTransitionsIntentService : IntentService(TAG) {
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
-            val geofenceTransitionEnter = Intent(BROADCAST_GEOFENCE_TRANSITION_ENTER)
-            LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(geofenceTransitionEnter)
+            val geofenceTransitionEnterIntent = Intent(BROADCAST_GEOFENCE_TRANSITION_ENTER)
+            LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(geofenceTransitionEnterIntent)
 
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             val triggeringGeofences = geofencingEvent.triggeringGeofences

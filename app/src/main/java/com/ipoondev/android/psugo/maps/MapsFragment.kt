@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,38 +20,20 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ipoondev.android.psugo.R
 import com.ipoondev.android.psugo.auth.AuthUiActivity
-import com.ipoondev.android.psugo.geofencing.Geofencing
 import com.ipoondev.android.psugo.model.Item
+import com.ipoondev.android.psugo.model.Mission
+import com.ipoondev.android.psugo.model.Player
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
     private val TAG = MapsFragment::class.simpleName
     private lateinit var mMap: GoogleMap
     private lateinit var mMapFragment: MapFragment
-    lateinit var mFirestore: FirebaseFirestore
     var playerId: String? = null
-    lateinit var geofencing: Geofencing
-    lateinit var mContext: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mFirestore = FirebaseFirestore.getInstance()
-        // เมื่อ logout แล้วทำให้ playerID เป็น null -> app crash
         playerId = FirebaseAuth.getInstance().currentUser?.uid
-
-        mContext = activity as Context
-
-//        LocalBroadcastManager.getInstance(activity!!).registerReceiver(registerGeofenceCompleteReceiver,
-//                IntentFilter(BROADCAST_REGISTER_GEOFENCE_COMPLELE))
-
-
     }
-//
-//    private val registerGeofenceCompleteReceiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context?, intent: Intent?) {
-//            Toast.makeText(activity, "Receive register geofence complete signal", Toast.LENGTH_LONG).show()
-//            Log.d(TAG, "Receive register geofence complete signal")
-//        }
-//    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_maps, container, false)
@@ -60,14 +41,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         mMapFragment = activity!!.fragmentManager.findFragmentById(R.id.map) as MapFragment
         mMapFragment.getMapAsync(this)
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-//        Log.d(TAG, "onMapReady() : hit")
+        Log.d(TAG, "onMapReady() : hit")
         mMap = googleMap
 
         if (ActivityCompat.checkSelfPermission(activity!!, android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -79,76 +58,68 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         uiSettings.isCompassEnabled = true
         uiSettings.isZoomControlsEnabled = true
 
-//        checkExistingUser { isNull ->
-//            if (isNull.not()) {
-//                getItemList()
-//            }
-//        }
         if (hasPlayerId()) {
-            getItemList()
+            displayMarkers()
         } else {
-            showRequestSignInDialog {ok ->
+            showRequestSignInDialog { ok ->
                 if (ok) {
                     startAuthUiActivity()
                 }
             }
         }
-//
-//        LocalBroadcastManager.getInstance(activity!! ).registerReceiver(geofenceTransitionEnterReceiver,
-//                IntentFilter(BROADCAST_GEOFENCE_TRANSITION_ENTER))
-
     }
 
-//    private val geofenceTransitionEnterReceiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context?, intent: Intent?) {
-////            Toast.makeText(activity, "Receive geofence transition ENTER signal", Toast.LENGTH_LONG).show()
-//            Log.d(TAG, "Receive geofence transition ENTER signal")
-//
-//            showTransitionEnterDialog(context!!)
-////            showTransitionEnterDialog()
-//        }
-//    }
+    private fun displayMarkers() {
+        FirebaseFirestore.getInstance().collection("players").document(playerId!!)
+                .get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        val document = it.result
+                        if (document.exists()) {
+//                            Log.d(TAG, "DocumentSnapshot data: " + document.data)
+                        }
+                    }
+                }
+                .addOnSuccessListener {
+                    val player = it.toObject(Player::class.java)
+                    Log.d(TAG, "currentMissionId: ${player!!.currentMissionId}")
+                    if (player.currentMissionId != null) {
+                        FirebaseFirestore.getInstance().collection("missions").document(player.currentMissionId!!)
+                                .get()
+                                .addOnSuccessListener {
+                                    val mission = it.toObject(Mission::class.java)
+                                    Log.d(TAG, "selectedItems: ${mission!!.selectedItems}")
 
-//    private fun showTransitionEnterDialog(context: Context) {
-//        Log.d(TAG, "showTransitionEnterDialog() : hit")
-////        val builder = AlertDialog.Builder((activity as? Context)!!)
-//        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.myDialog))
-//                .setMessage("Do you want to take the quiz?")
-//                .setPositiveButton("Quiz", { dialog, which ->
-//                    startQuizActivity()
-//                })
-//                .setNegativeButton("NO", { dialog, which -> dialog.cancel() })
-//
-//        val dialog = builder.create()
-//        dialog.show()
-//    }
-//
-//    private fun startQuizActivity() {
-//        val quizInent = Intent(activity as Context, QuizActivity::class.java)
-//        startActivity(quizInent)
-//    }
+                                    mission.selectedItems!!.forEach { itemId ->
+                                        FirebaseFirestore.getInstance().collection("items").document(itemId)
+                                                .get()
+                                                .addOnSuccessListener {
+                                                    val item = it.toObject(Item::class.java)!!
+//                                                Log.d(TAG, "Item Name: ${item!!.name}")
+//                                                Log.d(TAG, "Item Latitude: ${item.latitude}")
+//                                                Log.d(TAG, "Item Longitude: ${item.longitude}")
+                                                    displayMarker(item)
+                                                }
+                                    }
 
-    private fun hasPlayerId() : Boolean {
+                                }
+                    }
+                }
+                .addOnFailureListener {
+                }
+    }
+
+    private fun displayMarker(item: Item) {
+        val latitude = item.latitude!!.toDouble()
+        val longitude = item.longitude!!.toDouble()
+        val name = item.name
+        val latLng = LatLng(latitude, longitude)
+        mMap.addMarker(MarkerOptions().position(latLng).title(name))
+    }
+
+    private fun hasPlayerId(): Boolean {
         return playerId != null
     }
-
-//    private fun checkExistingUser(isNull: (Boolean) -> Unit) {
-//        Log.d(TAG, "checkExistingUser() : hit")
-//        val user = FirebaseAuth.getInstance().currentUser
-//        if (user == null) {
-//            Log.d(TAG, "checkExistingUser() : if user is null")
-//            showRequestSignInDialog { ok ->
-//                if (ok) {
-//                    startAuthUiActivity()
-//                }
-//                isNull(true)
-//            }
-//        } else {
-//            Log.d(TAG, "checkExistingUser() : If user is not null")
-//            isNull(false)
-//            playerId = user.uid
-//        }
-//    }
 
     private fun showRequestSignInDialog(complete: (Boolean) -> Unit) {
         val builder = AlertDialog.Builder(activity as Context)
@@ -166,64 +137,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         startActivity(authUiActivityIntent)
     }
 
-    // GET currentMissionId
-    private fun getItemList(): ArrayList<Item> {
-        var itemList = ArrayList<Item>()
-        var currentMissionId: String? = null
-
-        val playerRef = mFirestore.collection("players").document(playerId!!)
-        playerRef.get().addOnCompleteListener { task ->
-           if (task.isSuccessful) {
-                 currentMissionId = task.result.data["currentMissionId"].toString()
-                Log.d(TAG, "$currentMissionId")
-                itemList = getAllItems(currentMissionId!!)
-           }
-
-        }.addOnFailureListener {
-
-                }
-        return itemList
-    }
-
-    private fun getAllItems(missionId: String): ArrayList<Item> {
-        val itemList = ArrayList<Item>()
-
-        val itemsRef = mFirestore.collection("missions").document(missionId)
-                .collection("items")
-        itemsRef.get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        for (itemDocument in task.result) {
-//                            Log.d(TAG, "${itemDocument.id} => ${itemDocument.data}")
-                            val item = itemDocument.toObject(Item::class.java)
-                            itemList.add(item)
-                            displayMarker(itemList)
-                        }
-                    } else {
-                        Log.d(TAG, "Error getting document: ${task.exception}")
-                    }
-                }
-
-        return itemList
-    }
-
-    private fun displayMarker(itemList: ArrayList<Item>) {
-
-        itemList.forEach { item ->
-            val latLng = LatLng(item.geoPoint!!.latitude, item.geoPoint!!.longitude)
-            mMap.addMarker(MarkerOptions().
-                    position(latLng)
-                    .title(item.name))
-        }
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                LatLng(itemList[0].geoPoint!!.latitude,
-                        itemList[0].geoPoint!!.longitude), 15F))
-
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-            activity!!.fragmentManager.beginTransaction().remove(mMapFragment).commit()
+        activity!!.fragmentManager.beginTransaction().remove(mMapFragment).commit()
     }
 }
